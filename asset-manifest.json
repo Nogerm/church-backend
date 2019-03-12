@@ -1,0 +1,14 @@
+{
+  "main.css": "/church-backend/static/css/main.a23f6138.chunk.css",
+  "main.js": "/church-backend/static/js/main.5c944905.chunk.js",
+  "main.js.map": "/church-backend/static/js/main.5c944905.chunk.js.map",
+  "runtime~main.js": "/church-backend/static/js/runtime~main.77007e15.js",
+  "runtime~main.js.map": "/church-backend/static/js/runtime~main.77007e15.js.map",
+  "static/js/2.8f71a45e.chunk.js": "/church-backend/static/js/2.8f71a45e.chunk.js",
+  "static/js/2.8f71a45e.chunk.js.map": "/church-backend/static/js/2.8f71a45e.chunk.js.map",
+  "index.html": "/church-backend/index.html",
+  "precache-manifest.9b6f03c309a00dd50df31b88965c4c7f.js": "/church-backend/precache-manifest.9b6f03c309a00dd50df31b88965c4c7f.js",
+  "service-worker.js": "/church-backend/service-worker.js",
+  "static/css/main.a23f6138.chunk.css.map": "/church-backend/static/css/main.a23f6138.chunk.css.map",
+  "static/media/logo.svg": "/church-backend/static/media/logo.5d5d9eef.svg"
+}
