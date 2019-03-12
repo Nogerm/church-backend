@@ -8,19 +8,19 @@ self.__precacheManifest = [
     "url": "/church-backend/static/js/runtime~main.77007e15.js"
   },
   {
-    "revision": "52861899f74311308e59",
-    "url": "/church-backend/static/js/main.264c6b5a.chunk.js"
+    "revision": "3f4f1626c4b5df97678f",
+    "url": "/church-backend/static/js/main.d0adb8fa.chunk.js"
   },
   {
     "revision": "ba264cd90c4d36546d5a",
     "url": "/church-backend/static/js/2.8f71a45e.chunk.js"
   },
   {
-    "revision": "52861899f74311308e59",
+    "revision": "3f4f1626c4b5df97678f",
     "url": "/church-backend/static/css/main.a23f6138.chunk.css"
   },
   {
-    "revision": "9516fcea3eebd93613b08b54763e4140",
+    "revision": "0b1900c607df8e059898959b634530e7",
     "url": "/church-backend/index.html"
   }
 ];
