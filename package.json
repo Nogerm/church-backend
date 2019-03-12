@@ -2,8 +2,9 @@
   "name": "church-backend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://nogerm.github.io/church-backend",
+  "homepage": "https://nogerm.github.io/church-backend",
   "dependencies": {
+    "axios": "^0.18.0",
     "gh-pages": "^2.0.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
