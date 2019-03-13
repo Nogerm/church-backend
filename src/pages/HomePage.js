@@ -1,6 +1,7 @@
 import React, { Component}  from 'react';
 import logo from './logo.svg';
 import queryString from 'query-string';
+import axios from 'axios';
 import './App.css';
 
 export default class HomePage extends Component {
@@ -12,7 +13,7 @@ export default class HomePage extends Component {
     console.log("code: " + login_code + "\nstate: " + login_state);
 
     if(login_code != undefined) {
-      const server_login_url = "https://nogerm-demo-test.herokuapp.com/contacts";
+      const server_login_url = "https://nogerm-demo-test.herokuapp.com/login";
       const headers = {
         'Content-Type': 'application/json'
       }
@@ -25,7 +26,7 @@ export default class HomePage extends Component {
         console.log("[login] success" + response);
       })
       .catch(function (error) {
-        console.log("[login] error" + err);
+        console.log("[login] error" + error);
       });
     }
 
