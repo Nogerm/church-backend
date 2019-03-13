@@ -1,6 +1,7 @@
 import React, { Component}  from 'react';
 import logo from './logo.svg';
-import queryString from 'query-string'
+import queryString from 'query-string';
+import './App.css';
 
 export default class LoginPage extends Component {
 
