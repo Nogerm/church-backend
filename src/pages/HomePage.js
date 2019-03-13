@@ -2,6 +2,7 @@ import React, { Component}  from 'react';
 import logo from './logo.svg';
 import queryString from 'query-string';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import './App.css';
 
 export default class HomePage extends Component {
@@ -23,7 +24,11 @@ export default class HomePage extends Component {
       }
       axios.post(server_login_url, data, headers)
       .then(function (response) {
-        console.log("[login] success" + response);
+        const decoded = jwt_decode(response.data.id_token);
+        const userId = decoded.sub;
+        const userName = decoded.name;
+        const userImageUrl = decoded.picture;
+        console.log("[login] user id: " + userId + "\nuser name: " + userName + "\nuser image url: " + userImageUrl);
       })
       .catch(function (error) {
         console.log("[login] error" + error);

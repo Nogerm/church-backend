@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "gh-pages": "^2.0.1",
+    "jwt-decode": "^2.2.0",
     "query-string": "^6.3.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
