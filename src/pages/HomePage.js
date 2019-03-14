@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import './App.css';
-import { Grid, Menu, Header, Container, Segment } from 'semantic-ui-react'
+import { Grid, Menu, Image, Header, Container, Segment } from 'semantic-ui-react'
 
 export default class HomePage extends Component {
 
@@ -72,8 +72,17 @@ export default class HomePage extends Component {
     const loginUrl = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554176659&redirect_uri=https://nogerm.github.io/church-backend&state=1234&scope=openid%20profile";
     return (
       <Grid>
-        <Grid.Row columns={1} style={{background: 'green'}}>
-          <Header as='h1'>This is a loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong herder</Header>
+        <Grid.Row columns={1} style={{padding: '0px'}}>
+          <Segment raised style={{background: '#9ccc65', margin: '0px', flex:1}}>
+          <Grid>
+            <Grid.Column width={1}>
+              <Image style={{height:'40px'}} src='https://886point.com/wp-content/uploads/2018/07/icon512-2x-600x600.png'/>
+            </Grid.Column>
+            <Grid.Column width={15}>
+              <Header as='H1' style={{color:'white'}}>LINE Console</Header>
+            </Grid.Column>
+            </Grid>
+          </Segment>
         </Grid.Row>
         <Grid.Row columns={2}>
           <Grid.Column width={3}>
