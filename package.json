@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://nogerm.github.io/church-backend",
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
     "axios": "^0.18.0",
     "gh-pages": "^2.0.1",
     "jwt-decode": "^2.2.0",

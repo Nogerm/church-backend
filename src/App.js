@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Switch, BrowserRouter } from "react-router-dom"
+import { Route, Switch } from "react-router-dom"
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
 
-class App extends Component {
+export default class App extends Component {
   render() {
     return (
       <Switch>
@@ -12,5 +11,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
