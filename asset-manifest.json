@@ -1,13 +1,13 @@
 {
   "main.css": "/church-backend/static/css/main.a0e549f9.chunk.css",
-  "main.js": "/church-backend/static/js/main.81c271a9.chunk.js",
-  "main.js.map": "/church-backend/static/js/main.81c271a9.chunk.js.map",
+  "main.js": "/church-backend/static/js/main.4e92c8be.chunk.js",
+  "main.js.map": "/church-backend/static/js/main.4e92c8be.chunk.js.map",
   "runtime~main.js": "/church-backend/static/js/runtime~main.77007e15.js",
   "runtime~main.js.map": "/church-backend/static/js/runtime~main.77007e15.js.map",
   "static/js/2.e0d82cce.chunk.js": "/church-backend/static/js/2.e0d82cce.chunk.js",
   "static/js/2.e0d82cce.chunk.js.map": "/church-backend/static/js/2.e0d82cce.chunk.js.map",
   "index.html": "/church-backend/index.html",
-  "precache-manifest.012036cfcc1cd2951f345a4ff172a4dc.js": "/church-backend/precache-manifest.012036cfcc1cd2951f345a4ff172a4dc.js",
+  "precache-manifest.0ab670b4c64c8273cfbf2591e898ae94.js": "/church-backend/precache-manifest.0ab670b4c64c8273cfbf2591e898ae94.js",
   "service-worker.js": "/church-backend/service-worker.js",
   "static/css/main.a0e549f9.chunk.css.map": "/church-backend/static/css/main.a0e549f9.chunk.css.map",
   "static/media/logo.svg": "/church-backend/static/media/logo.5d5d9eef.svg"
