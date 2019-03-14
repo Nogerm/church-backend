@@ -8,8 +8,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-
+import Avatar from '@material-ui/core/Avatar';
 
 export default class HomePage extends Component {
 
@@ -17,7 +16,10 @@ export default class HomePage extends Component {
     super(props);
     this.state = {
       hasSendRequest: false,
-      hasLoggedIn: false
+      hasLoggedIn: false,
+      userId: "",
+      userName: "",
+      userImage: ""
     };
   }
 
@@ -28,6 +30,9 @@ export default class HomePage extends Component {
     console.log("code: " + login_code + "\nstate: " + login_state);
 
     if(login_code !== undefined) {
+      this.setState({
+        hasSendRequest: true
+      });
       const server_login_url = "https://nogerm-demo-test.herokuapp.com/login";
       const headers = {
         'Content-Type': 'application/json'
@@ -37,18 +42,25 @@ export default class HomePage extends Component {
         state: login_state
       }
       axios.post(server_login_url, data, headers)
-      .then(function (response) {
+      .then(response => {
         const decoded = jwt_decode(response.data.id_token);
-        const userId = decoded.sub;
-        const userName = decoded.name;
-        const userImageUrl = decoded.picture;
-        console.log("[login] user id: " + userId + "\nuser name: " + userName + "\nuser image url: " + userImageUrl);
+        console.log("[login]\nuser id: " + decoded.sub + "\nuser name: " + decoded.name + "\nuser image url: " + decoded.picture);
+        this.setState({
+          userId: decoded.sub || "",
+          userName: decoded.name || "",
+          userImageUrl: decoded.picture || "",
+          hasLoggedIn: true
+        });
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log("[login] error" + error);
       });
     }
 
+
+  }
+
+  checkState = () => {
 
   }
 
@@ -57,33 +69,28 @@ export default class HomePage extends Component {
   }
 
 	render() {
+    const userName = this.state.userName;
+    const userImageUrl = this.state.userImage;
+    const loginUrl = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554176659&redirect_uri=https://nogerm.github.io/church-backend&state=1234&scope=openid%20profile";
     return (
 
 			<div>
         <AppBar position="static">
-        <Toolbar>
-          <IconButton  color="inherit" aria-label="Menu">
-          </IconButton>
-          <Typography variant="h6" color="inherit">
-            Settings
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
+          <Toolbar>
+            <Typography variant="h6" color="inherit">
+              Settings
+            </Typography>
+            <Avatar alt="Remy Sharp" src={userImageUrl}/>
+            <p>{userName}</p>
+            <Button variant="contained"  color="inherit" href={loginUrl}>
+              Login with LINE
+            </Button>
+          </Toolbar>
+        </AppBar>
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Home Page
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <a href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554176659&redirect_uri=https://nogerm.github.io/church-backend&state=1234&scope=openid%20profile" onClick={this.handleClick.bind(this)}>Sign in with Github</a>;
-
       </div>
     );
   }
