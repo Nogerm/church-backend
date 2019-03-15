@@ -1,16 +1,16 @@
 {
   "main.css": "/church-backend/static/css/main.2ac7ebd8.chunk.css",
-  "main.js": "/church-backend/static/js/main.794c8c7a.chunk.js",
-  "main.js.map": "/church-backend/static/js/main.794c8c7a.chunk.js.map",
+  "main.js": "/church-backend/static/js/main.a1a7a4f7.chunk.js",
+  "main.js.map": "/church-backend/static/js/main.a1a7a4f7.chunk.js.map",
   "runtime~main.js": "/church-backend/static/js/runtime~main.77007e15.js",
   "runtime~main.js.map": "/church-backend/static/js/runtime~main.77007e15.js.map",
-  "static/css/2.5226c93e.chunk.css": "/church-backend/static/css/2.5226c93e.chunk.css",
-  "static/js/2.d286aa91.chunk.js": "/church-backend/static/js/2.d286aa91.chunk.js",
-  "static/js/2.d286aa91.chunk.js.map": "/church-backend/static/js/2.d286aa91.chunk.js.map",
+  "static/css/2.e7e2fed5.chunk.css": "/church-backend/static/css/2.e7e2fed5.chunk.css",
+  "static/js/2.368040b5.chunk.js": "/church-backend/static/js/2.368040b5.chunk.js",
+  "static/js/2.368040b5.chunk.js.map": "/church-backend/static/js/2.368040b5.chunk.js.map",
   "index.html": "/church-backend/index.html",
-  "precache-manifest.337522b6f5feb9c53be6061198536a02.js": "/church-backend/precache-manifest.337522b6f5feb9c53be6061198536a02.js",
+  "precache-manifest.29f9602d303c2fbecdcfd72c996d97ab.js": "/church-backend/precache-manifest.29f9602d303c2fbecdcfd72c996d97ab.js",
   "service-worker.js": "/church-backend/service-worker.js",
-  "static/css/2.5226c93e.chunk.css.map": "/church-backend/static/css/2.5226c93e.chunk.css.map",
+  "static/css/2.e7e2fed5.chunk.css.map": "/church-backend/static/css/2.e7e2fed5.chunk.css.map",
   "static/css/main.2ac7ebd8.chunk.css.map": "/church-backend/static/css/main.2ac7ebd8.chunk.css.map",
   "static/media/semantic.min.css": "/church-backend/static/media/outline-icons.ef60a4f6.woff"
 }
