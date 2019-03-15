@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import './App.css';
+import lineLogo from './LINE@_APP_typeA.png';
 import userDefaultImg from './user_default.png';
 import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-react'
 
@@ -11,7 +12,7 @@ export default class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: 'bio',
+      activeItem: '修改圖文選單',
       hasSendRequest: false,
       hasLoggedIn: false,
       userId: "",
@@ -70,17 +71,50 @@ export default class HomePage extends Component {
       return (
         <Grid.Row columns={2}>
           <Grid.Column width={3}>
-            <Menu fluid vertical tabular>
-              <Menu.Item name='bio' active={activeItem === 'bio'} onClick={this.handleItemClick} />
-              <Menu.Item name='pics' active={activeItem === 'pics'} onClick={this.handleItemClick} />
-              <Menu.Item
-                name='companies'
-                active={activeItem === 'companies'}
+            <Menu fluid vertical tabular style={{'font-family': 'Noto Sans TC'}}>
+              <Menu.Item 
+                name='修改圖文選單'
+                active={activeItem === '修改圖文選單'}
                 onClick={this.handleItemClick}
               />
               <Menu.Item
-                name='links'
-                active={activeItem === 'links'}
+                name='修改聚會時間'
+                active={activeItem === '修改聚會時間'}
+                onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name='修改交通資訊'
+                active={activeItem === '修改交通資訊'}
+                onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name='修改主日信息影音'
+                active={activeItem === '修改主日信息影音'}
+                onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name='修改官網/FB'
+                active={activeItem === '修改官網/FB'}
+                onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name='修改小組聚會資訊'
+                active={activeItem === '修改小組聚會資訊'}
+                onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name='修改週報/News'
+                active={activeItem === '修改週報/News'}
+                onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name='修改加入好友'
+                active={activeItem === '修改加入好友'}
+                onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name='修改今日聖言'
+                active={activeItem === '修改今日聖言'}
                 onClick={this.handleItemClick}
               />
             </Menu>
@@ -111,13 +145,13 @@ export default class HomePage extends Component {
     return (
       <Grid>
         <Grid.Row columns={1} style={{padding: '0px'}}>
-          <Segment raised style={{background: '#00c853', margin: '0px', flex:1}}>
+          <Segment raised style={{background: '#00B300', margin: '0px', flex:1}}>
             <div style={{flexDirection: 'row', display: 'flex' }}>
-              <Image style={{height:'52px', width:'52px'}} src='https://886point.com/wp-content/uploads/2018/07/icon512-2x-600x600.png'/>
+              <Image style={{height:'52px', width:'52px'}} src={lineLogo}/>
               <Header as='H1' style={{color:'white', margin:'0px', padding:'8px', flex:1, 'font-family': 'Roboto'}}>LINE Console</Header>
               <Image avatar src={userImageUrl} style={{width:'52px', height:'52px', padding:'8px'}}/>
               <Header as='H1' style={{color:'white', margin:'0px', width:'150px', padding:'8px', 'font-family': 'Noto Sans TC'}}>{userName}</Header>
-              <Button floated='right' style={{color:'white', background:'#009624', margin:'8px'}} onClick={this.handleLoginClicked}>LINE LOGIN</Button>
+              <Button floated='right' style={{color:'white', background:'#2e7d32', margin:'8px'}} onClick={this.handleLoginClicked}>LINE LOGIN</Button>
             </div>
           </Segment>
         </Grid.Row>
