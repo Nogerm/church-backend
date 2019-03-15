@@ -97,7 +97,7 @@ export default class HomePage extends Component {
       )
     } else {
       return (
-        <Header as='H1' style={{margin:'auto'}}>請先登入</Header>
+        <Header as='H1' style={{color:'#484848', margin:'auto', 'font-family': 'Noto Sans TC'}}>請先登入</Header>
       )
     }
   }
@@ -109,13 +109,13 @@ export default class HomePage extends Component {
     return (
       <Grid>
         <Grid.Row columns={1} style={{padding: '0px'}}>
-          <Segment raised style={{background: '#9ccc65', margin: '0px', flex:1}}>
+          <Segment raised style={{background: '#00c853', margin: '0px', flex:1}}>
             <div style={{flexDirection: 'row', display: 'flex' }}>
               <Image style={{height:'52px', width:'52px'}} src='https://886point.com/wp-content/uploads/2018/07/icon512-2x-600x600.png'/>
               <Header as='H1' style={{color:'white', margin:'0px', padding:'8px', flex:1, 'font-family': 'Roboto'}}>LINE Console</Header>
               <Image avatar src={userImageUrl} style={{width:'52px', height:'52px', padding:'8px'}}/>
               <Header as='H1' style={{color:'white', margin:'0px', width:'150px', padding:'8px', 'font-family': 'Noto Sans TC'}}>{userName}</Header>
-              <Button floated='right' style={{color:'white', background:'#004d40', margin:'8px'}} onClick={this.handleLoginClicked}>LINE LOGIN</Button>
+              <Button floated='right' style={{color:'white', background:'#009624', margin:'8px'}} onClick={this.handleLoginClicked}>LINE LOGIN</Button>
             </div>
           </Segment>
         </Grid.Row>
