@@ -4,7 +4,7 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import './App.css';
 import userDefaultImg from './user_default.png';
-import { Grid, Menu, Image, Header, Button, Segment } from 'semantic-ui-react'
+import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-react'
 
 export default class HomePage extends Component {
 
@@ -62,8 +62,9 @@ export default class HomePage extends Component {
 
   renderBody = () => {
     const { activeItem } = this.state
+    const hasSendRequest = this.state.hasSendRequest;
     const hasLoggedIn = this.state.hasLoggedIn;
-    if(hasLoggedIn) {
+    if(hasSendRequest && hasLoggedIn) {
       return (
         <Grid.Row columns={2}>
           <Grid.Column width={3}>
@@ -90,9 +91,13 @@ export default class HomePage extends Component {
           </Grid.Column>
         </Grid.Row>
       )
+    } else if(hasSendRequest && !hasLoggedIn) {
+      return (
+        <Loader active inline='centered' />
+      )
     } else {
       return (
-        <Header as='H1' style={{color:'white'}}>請先登入</Header>
+        <Header as='H1' style={{margin:'auto'}}>請先登入</Header>
       )
     }
   }
