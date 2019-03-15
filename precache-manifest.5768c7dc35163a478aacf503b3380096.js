@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/church-backend/static/media/icons.0ab54153.woff2"
   },
   {
-    "revision": "ce630057956f1f823645",
+    "revision": "7832c4c535994fe00e0e",
     "url": "/church-backend/static/css/main.2ac7ebd8.chunk.css"
   },
   {
@@ -44,8 +44,8 @@ self.__precacheManifest = [
     "url": "/church-backend/static/media/outline-icons.ad97afd3.ttf"
   },
   {
-    "revision": "ce630057956f1f823645",
-    "url": "/church-backend/static/js/main.503f90cb.chunk.js"
+    "revision": "7832c4c535994fe00e0e",
+    "url": "/church-backend/static/js/main.39dcf0cd.chunk.js"
   },
   {
     "revision": "faff92145777a3cbaf8e7367b4807987",
@@ -60,16 +60,16 @@ self.__precacheManifest = [
     "url": "/church-backend/static/media/brand-icons.a046592b.woff"
   },
   {
-    "revision": "8e3c7f5520f5ae906c6cf6d7f3ddcd19",
-    "url": "/church-backend/static/media/icons.8e3c7f55.eot"
-  },
-  {
     "revision": "b87b9ba532ace76ae9f6edfe9f72ded2",
     "url": "/church-backend/static/media/icons.b87b9ba5.ttf"
   },
   {
     "revision": "13db00b7a34fee4d819ab7f9838cc428",
     "url": "/church-backend/static/media/brand-icons.13db00b7.eot"
+  },
+  {
+    "revision": "8e3c7f5520f5ae906c6cf6d7f3ddcd19",
+    "url": "/church-backend/static/media/icons.8e3c7f55.eot"
   },
   {
     "revision": "c5ebe0b32dc1b5cc449a76c4204d13bb",
@@ -88,7 +88,7 @@ self.__precacheManifest = [
     "url": "/church-backend/static/css/2.e7e2fed5.chunk.css"
   },
   {
-    "revision": "72df2500fecabad5d7ad39f4e23ba602",
+    "revision": "1799f843cb59723cc8df74e989f4341a",
     "url": "/church-backend/index.html"
   }
 ];
