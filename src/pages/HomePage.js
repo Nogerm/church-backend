@@ -60,6 +60,8 @@ export default class HomePage extends Component {
     window.location.href = loginUrl;
   }
 
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
   renderBody = () => {
     const { activeItem } = this.state
     const hasSendRequest = this.state.hasSendRequest;
