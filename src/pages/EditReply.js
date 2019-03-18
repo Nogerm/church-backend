@@ -23,6 +23,10 @@ export default class EditReply extends Component {
     //remove this message
   }
 
+  handleCodeChange = (e, { value }) => {
+    this.props.callback(this.props.idx, value);
+  }
+
   renderContent = () => {
     if(this.state.type === "Text") {
       return (
@@ -30,7 +34,7 @@ export default class EditReply extends Component {
           <p>2. 使用 Bot Designer 設計好訊息</p>
           <p>3. 複製貼上 Bot Designer 產生的程式</p>
           <Form>
-            <TextArea placeholder='Tell us more' style={{ minHeight: 100 }} />
+            <TextArea placeholder='貼上程式碼' style={{ minHeight: 100 }} onChange={this.handleCodeChange}/>
           </Form>
         </div>
         

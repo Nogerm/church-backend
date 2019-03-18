@@ -32,13 +32,34 @@ export default class EditReplies extends Component {
     }
   }
 
-  handleSaveClicked = () => {
+  handleContentChange = (id, newContent) => {
+    this.setState({
+      messageArray: this.state.messageArray.splice(id, 1, JSON.parse(newContent))
+    });
+    console.log("handleContentChange: " + JSON.stringify(this.state.messageArray));
+  }
 
+  handleSaveClicked = () => {
+    const server_login_url = "https://nogerm-demo-test.herokuapp.com/time_info";
+    const headers = {
+      'Content-Type': 'application/json'
+    }
+    const data = {
+      "messages": JSON.stringify(this.state.messageArray)
+    }
+    axios.post(server_login_url, data, headers)
+    .then(response => {
+      console.log("[handleContentChange] success");
+    })
+    .catch(error => {
+      console.log("[handleContentChange] error" + error);
+    });
   }
 
 	render() {
     const messageArray = this.state.messageArray;
     const renderAddMessage = this.renderAddMessage;
+    const handleContentChange = this.handleContentChange;
 		return (
       <div>
         <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>編輯回應訊息(最多5則)</Header>
@@ -49,7 +70,7 @@ export default class EditReplies extends Component {
         <Segment.Group raised>
           {messageArray.map(function(message, index){
             return (
-              <EditReply key={index}/>
+              <EditReply key={index} idx={index} callback={handleContentChange}/>
             )
           })}
           {renderAddMessage()}
