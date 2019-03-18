@@ -11,10 +11,22 @@ export default class EditReplies extends Component {
     this.state = {
       messageArray: [{}, {}]
     };
-	}
+  }
+  
+  renderAddMessage = () => {
+    const MAX_REPLY_NUM = 5;
+    if(this.state.messageArray.length < MAX_REPLY_NUM) {
+      return (
+        <Segment>
+          <Button fluid>點我新增回應訊息</Button>
+        </Segment>
+      )
+    }
+  }
 
 	render() {
     const messageArray = this.state.messageArray;
+    const renderAddMessage = this.renderAddMessage;
 		return (
 			<Segment.Group raised>
         {messageArray.map(function(message, index){
@@ -22,6 +34,7 @@ export default class EditReplies extends Component {
             <EditReply/>
           )
         })}
+        {renderAddMessage()}
       </Segment.Group>
 		)
 	}
