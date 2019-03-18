@@ -9,18 +9,19 @@ export default class EditReplies extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-      activeItem: '修改圖文選單',
+      messageArray: [{}, {}]
     };
 	}
 
 	render() {
+    const messageArray = this.state.messageArray;
 		return (
 			<Segment.Group raised>
-        <EditReply/>
-        <EditReply/>
-        <EditReply/>
-        <EditReply/>
-        <EditReply/>
+        {messageArray.map(function(message, index){
+          return (
+            <EditReply/>
+          )
+        })}
       </Segment.Group>
 		)
 	}
