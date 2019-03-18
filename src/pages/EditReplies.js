@@ -4,6 +4,8 @@ import jwt_decode from 'jwt-decode';
 import { Grid, Menu, Image, Header, Button, Segment } from 'semantic-ui-react'
 import EditReply from './EditReply';
 
+const MAX_REPLY_NUM = 5;
+
 export default class EditReplies extends Component {
 
 	constructor(props) {
@@ -13,12 +15,19 @@ export default class EditReplies extends Component {
     };
   }
   
+  addReplyMsg = () => {
+    if(this.state.messageArray.length < MAX_REPLY_NUM) {
+      this.setState({
+        messageArray: [...this.state.messageArray, {}]
+      })
+    }
+  }
+
   renderAddMessage = () => {
-    const MAX_REPLY_NUM = 5;
     if(this.state.messageArray.length < MAX_REPLY_NUM) {
       return (
         <Segment>
-          <Button fluid>點我新增回應訊息</Button>
+          <Button fluid onClick={this.addReplyMsg}>點我新增回應訊息</Button>
         </Segment>
       )
     }

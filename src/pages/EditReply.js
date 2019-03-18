@@ -11,12 +11,16 @@ export default class EditReply extends Component {
     };
   }
 
-  onChange = (e, { value }) => {
+  onTypeChange = (e, { value }) => {
     this.setState({
       type: value
     },()=>{
       console.log(this.state.type);
     })
+  }
+
+  onRemoveMsg = () => {
+    //remove this message
   }
 
   renderContent = () => {
@@ -35,7 +39,6 @@ export default class EditReply extends Component {
   }
 
 	render() {
-    const { type } = this.state;
     const renderContent = this.renderContent;
     const msgTypeOptions = [
       {
@@ -53,7 +56,7 @@ export default class EditReply extends Component {
 		return (
       <Segment>
         <p>1. 選擇要新增的訊息類別</p>
-        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection onChange={this.onChange}></Dropdown>
+        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection onChange={this.onTypeChange}></Dropdown>
         {renderContent()}
       </Segment>
 		)
