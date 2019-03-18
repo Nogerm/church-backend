@@ -10,7 +10,7 @@ export default class EditReplies extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-      messageArray: [{}, {}]
+      messageArray: [{}]
     };
   }
   
@@ -33,19 +33,26 @@ export default class EditReplies extends Component {
   }
 
   handleContentChange = (id, newContent) => {
+    console.log("id: " + id);
+    console.log("newContent: " + newContent);
+    const newArray = [...this.state.messageArray]
+    newArray.splice(id, 1, newContent);
+    console.log("newArray: " + newArray);
     this.setState({
-      messageArray: this.state.messageArray.splice(id, 1, JSON.parse(newContent))
+      messageArray: [...newArray]
+    }, () => {
+      console.log("handleContentChange: " + this.state.messageArray);
     });
-    console.log("handleContentChange: " + JSON.stringify(this.state.messageArray));
   }
 
   handleSaveClicked = () => {
+    console.log("messageArray:"+JSON.stringify(this.state.messageArray));
     const server_login_url = "https://nogerm-demo-test.herokuapp.com/time_info";
     const headers = {
       'Content-Type': 'application/json'
     }
     const data = {
-      "messages": JSON.stringify(this.state.messageArray)
+      messages: this.state.messageArray
     }
     axios.post(server_login_url, data, headers)
     .then(response => {
