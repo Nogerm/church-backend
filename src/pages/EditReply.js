@@ -26,13 +26,13 @@ export default class EditReply extends Component {
   renderContent = () => {
     if(this.state.type === "Text") {
       return (
-        <Container>
+        <div>
           <p>2. 使用 Bot Designer 設計好訊息</p>
           <p>3. 複製貼上 Bot Designer 產生的程式</p>
           <Form>
             <TextArea placeholder='Tell us more' style={{ minHeight: 100 }} />
           </Form>
-        </Container>
+        </div>
         
       )
     }

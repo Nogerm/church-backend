@@ -72,7 +72,7 @@ export default class HomePage extends Component {
       return (
         <Grid.Row columns={2}>
           <Grid.Column width={3}>
-            <Menu fluid vertical tabular style={{'font-family': 'Noto Sans TC'}}>
+            <Menu fluid vertical tabular style={{fontFamily: 'Noto Sans TC'}}>
               <Menu.Item name='修改圖文選單' active={activeItem === '修改圖文選單'} onClick={this.handleItemClick}/>
               <Menu.Item name='修改聚會時間' active={activeItem === '修改聚會時間'} onClick={this.handleItemClick}/>
               <Menu.Item name='修改交通資訊' active={activeItem === '修改交通資訊'} onClick={this.handleItemClick}/>
@@ -96,7 +96,7 @@ export default class HomePage extends Component {
       )
     } else {
       return (
-        <Header as='H1' style={{color:'#484848', margin:'auto', 'font-family': 'Noto Sans TC'}}>請先登入</Header>
+        <Header as='H1' style={{color:'#484848', margin:'auto', fontFamily: 'Noto Sans TC'}}>請先登入</Header>
       )
     }
   }
@@ -111,9 +111,9 @@ export default class HomePage extends Component {
           <Segment raised style={{background: '#37474f', margin: '0px', flex:1}}>
             <div style={{flexDirection: 'row', display: 'flex' }}>
               <Image style={{height:'52px', width:'52px'}} src={lineLogo}/>
-              <Header as='H1' style={{color:'white', margin:'0px', padding:'8px', flex:1, 'font-family': 'Roboto'}}>LINE Console</Header>
+              <Header as='h1' style={{color:'white', margin:'0px', padding:'8px', flex:1, fontFamily: 'Roboto'}}>LINE Console</Header>
               <Image avatar src={userImageUrl} style={{width:'52px', height:'52px', padding:'8px'}}/>
-              <Header as='H1' style={{color:'white', margin:'0px', minWidth:'100px', padding:'8px', 'font-family': 'Noto Sans TC'}}>{userName}</Header>
+              <Header as='h1' style={{color:'white', margin:'0px', minWidth:'100px', padding:'8px', fontFamily: 'Noto Sans TC'}}>{userName}</Header>
               <Button floated='right' style={{color:'white', background:'#00B300', margin:'8px'}} onClick={this.handleLoginClicked}>LINE LOGIN</Button>
             </div>
           </Segment>
