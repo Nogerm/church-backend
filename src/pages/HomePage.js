@@ -108,13 +108,13 @@ export default class HomePage extends Component {
     return (
       <Grid>
         <Grid.Row columns={1} style={{padding: '0px'}}>
-          <Segment raised style={{background: '#00B300', margin: '0px', flex:1}}>
+          <Segment raised style={{background: '#37474f', margin: '0px', flex:1}}>
             <div style={{flexDirection: 'row', display: 'flex' }}>
               <Image style={{height:'52px', width:'52px'}} src={lineLogo}/>
               <Header as='H1' style={{color:'white', margin:'0px', padding:'8px', flex:1, 'font-family': 'Roboto'}}>LINE Console</Header>
               <Image avatar src={userImageUrl} style={{width:'52px', height:'52px', padding:'8px'}}/>
               <Header as='H1' style={{color:'white', margin:'0px', minWidth:'100px', padding:'8px', 'font-family': 'Noto Sans TC'}}>{userName}</Header>
-              <Button floated='right' style={{color:'white', background:'#2e7d32', margin:'8px'}} onClick={this.handleLoginClicked}>LINE LOGIN</Button>
+              <Button floated='right' style={{color:'white', background:'#00B300', margin:'8px'}} onClick={this.handleLoginClicked}>LINE LOGIN</Button>
             </div>
           </Segment>
         </Grid.Row>
