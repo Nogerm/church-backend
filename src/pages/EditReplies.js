@@ -25,6 +25,9 @@ export default class EditReplies extends Component {
     axios.get(get_url)
     .then(response => {
       console.log("[queryReplyMsg] success" + JSON.stringify(response));
+      this.setState({
+        messageArray: response.data
+      });
     })
     .catch(error => {
       console.log("[queryReplyMsg] error" + error);

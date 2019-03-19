@@ -31,7 +31,7 @@ export default class EditReply extends Component {
   }
 
   renderContent = () => {
-    if(this.state.type === "Text" || this.state.type === "Sticker" || this.state.type === "Location" || this.state.type === "Confirm") {
+    if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
         <div>
@@ -43,27 +43,27 @@ export default class EditReply extends Component {
         </div>
         
       )
-    } else if(this.state.type === "Image") {
+    } else if(this.state.type === "image") {
       return (
         <div></div>
       )
-    } else if(this.state.type === "Video") {
+    } else if(this.state.type === "video") {
       return (
         <div></div>
       )
-    } else if(this.state.type === "Audio") {
+    } else if(this.state.type === "audio") {
       return (
         <div></div>
       )
-    } else if(this.state.type === "Imagemap") {
+    } else if(this.state.type === "imagemap") {
       return (
         <div></div>
       )
-    } else if(this.state.type === "Buttons") {
+    } else if(this.state.type === "buttons") {
       return (
         <div></div>
       )
-    } else if(this.state.type === "Carousel") {
+    } else if(this.state.type === "carousel") {
       return (
         <div></div>
       )
@@ -73,16 +73,16 @@ export default class EditReply extends Component {
 	render() {
     const renderContent = this.renderContent;
     const msgTypeOptions = [
-      { key: 'Text',     text: '文字',    value: 'Text' },
-      { key: 'Image',    text: '圖片',    value: 'Image' },
-      { key: 'Video',    text: '影片',    value: 'Video' },
-      { key: 'Audio',    text: '語音',    value: 'Audio' },
-      { key: 'Sticker',  text: '貼圖',    value: 'Sticker' },
-      { key: 'Imagemap', text: '影像地圖', value: 'Imagemap' },
-      { key: 'Location', text: '位置',    value: 'Location' },
-      { key: 'Confirm',  text: '確認範本', value: 'Confirm' },
-      { key: 'Buttons',  text: '按鍵範本', value: 'Buttons' },
-      { key: 'Carousel', text: '輪播範本', value: 'Carousel' }
+      { key: 'text',     text: '文字',    value: 'text' },
+      { key: 'image',    text: '圖片',    value: 'image' },
+      { key: 'video',    text: '影片',    value: 'video' },
+      { key: 'audio',    text: '語音',    value: 'audio' },
+      { key: 'sticker',  text: '貼圖',    value: 'sticker' },
+      { key: 'imagemap', text: '影像地圖', value: 'imagemap' },
+      { key: 'location', text: '位置',    value: 'location' },
+      { key: 'confirm',  text: '確認範本', value: 'confirm' },
+      { key: 'buttons',  text: '按鍵範本', value: 'buttons' },
+      { key: 'carousel', text: '輪播範本', value: 'carousel' }
     ];
 
 		return (
