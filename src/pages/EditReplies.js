@@ -107,7 +107,7 @@ export default class EditReplies extends Component {
         <Segment.Group raised>
           {messageArray.map(function(message, index){
             return (
-              <EditReply key={message._id} id={message._id} idx={index} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
+              <EditReply key={message._id} id={message._id} idx={index} type={message.type} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
             )
           })}
           {renderAddMessage()}

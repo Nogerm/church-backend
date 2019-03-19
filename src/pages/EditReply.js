@@ -6,7 +6,7 @@ export default class EditReply extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: ""
+      type: this.props.type || ""
     };
   }
 
@@ -31,7 +31,8 @@ export default class EditReply extends Component {
   }
 
   renderContent = () => {
-    if(this.state.type === "Text") {
+    if(this.state.type === "Text" || this.state.type === "Sticker" || this.state.type === "Location" || this.state.type === "Confirm") {
+      //Messages don't need image or file upload
       return (
         <div>
           <p>2. 使用 Bot Designer 設計好訊息</p>
@@ -42,22 +43,46 @@ export default class EditReply extends Component {
         </div>
         
       )
+    } else if(this.state.type === "Image") {
+      return (
+        <div></div>
+      )
+    } else if(this.state.type === "Video") {
+      return (
+        <div></div>
+      )
+    } else if(this.state.type === "Audio") {
+      return (
+        <div></div>
+      )
+    } else if(this.state.type === "Imagemap") {
+      return (
+        <div></div>
+      )
+    } else if(this.state.type === "Buttons") {
+      return (
+        <div></div>
+      )
+    } else if(this.state.type === "Carousel") {
+      return (
+        <div></div>
+      )
     }
   }
 
 	render() {
     const renderContent = this.renderContent;
     const msgTypeOptions = [
-      {
-        key: 'Text',
-        text: '文字',
-        value: 'Text'
-      },
-      {
-        key: 'Image',
-        text: '圖片',
-        value: 'Image'
-      }
+      { key: 'Text',     text: '文字',    value: 'Text' },
+      { key: 'Image',    text: '圖片',    value: 'Image' },
+      { key: 'Video',    text: '影片',    value: 'Video' },
+      { key: 'Audio',    text: '語音',    value: 'Audio' },
+      { key: 'Sticker',  text: '貼圖',    value: 'Sticker' },
+      { key: 'Imagemap', text: '影像地圖', value: 'Imagemap' },
+      { key: 'Location', text: '位置',    value: 'Location' },
+      { key: 'Confirm',  text: '確認範本', value: 'Confirm' },
+      { key: 'Buttons',  text: '按鍵範本', value: 'Buttons' },
+      { key: 'Carousel', text: '輪播範本', value: 'Carousel' }
     ];
 
 		return (
