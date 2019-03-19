@@ -1,8 +1,10 @@
 import React, { Component}  from 'react';
 import axios from 'axios';
-import { Grid, Menu, Image, Header, Button, Segment } from 'semantic-ui-react'
+import { ObjectID } from 'bson';
+import { Header, Button, Segment } from 'semantic-ui-react'
 import EditReply from './EditReply';
 
+const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
 const MAX_REPLY_NUM = 5;
 
 export default class EditReplies extends Component {
@@ -10,16 +12,74 @@ export default class EditReplies extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-      messageArray: [{}]
+      messageArray: []
     };
+  }
+
+  componentDidMount() {
+    this.queryReplyMsg();
+  }
+
+  queryReplyMsg = () => {
+    const get_url = BASE_URL + this.props.path;
+    axios.get(get_url)
+    .then(response => {
+      console.log("[queryReplyMsg] success" + JSON.stringify(response));
+    })
+    .catch(error => {
+      console.log("[queryReplyMsg] error" + error);
+    });
   }
   
   addReplyMsg = () => {
     if(this.state.messageArray.length < MAX_REPLY_NUM) {
+      const newMessage = {
+        _id: new ObjectID().id
+      }
       this.setState({
-        messageArray: [...this.state.messageArray, {}]
-      })
+        messageArray: [...this.state.messageArray, newMessage]
+      }, () => {
+        console.log("add message id: " + newMessage._id);
+      });
     }
+  }
+
+  handleContentDelete = (id) => {
+    const newArray = [...this.state.messageArray]
+    const deleteIdx = newArray.findIndex(item => item._id === id);
+    newArray.splice(deleteIdx, 1);
+    this.setState({
+      messageArray: [...newArray]
+    }, () => {
+      console.log("Delete message id: " + id);
+    });
+  }
+
+  handleContentChange = (id, newContent) => {
+    const newArray = [...this.state.messageArray]
+    newArray.splice(id, 1, JSON.parse(newContent));
+    this.setState({
+      messageArray: [...newArray]
+    }, () => {
+      console.log("handleContentChange: " + this.state.messageArray);
+    });
+  }
+
+  handleSaveClicked = () => {
+    const post_url = BASE_URL + this.props.path;
+    const headers = {
+      'content-type': 'application/json'
+    }
+    const data = {
+      messages: this.state.messageArray
+    }
+    axios.post(post_url, data, headers)
+    .then(response => {
+      console.log("[handleContentChange] success");
+    })
+    .catch(error => {
+      console.log("[handleContentChange] error" + error);
+    });
   }
 
   renderAddMessage = () => {
@@ -32,41 +92,11 @@ export default class EditReplies extends Component {
     }
   }
 
-  handleContentChange = (id, newContent) => {
-    console.log("id: " + id);
-    console.log("newContent: " + newContent);
-    const newArray = [...this.state.messageArray]
-    newArray.splice(id, 1, newContent);
-    console.log("newArray: " + newArray);
-    this.setState({
-      messageArray: [...newArray]
-    }, () => {
-      console.log("handleContentChange: " + this.state.messageArray);
-    });
-  }
-
-  handleSaveClicked = () => {
-    console.log("messageArray:"+JSON.stringify(this.state.messageArray));
-    const server_login_url = "https://nogerm-demo-test.herokuapp.com/time_info";
-    const headers = {
-      'Content-Type': 'application/json'
-    }
-    const data = {
-      messages: this.state.messageArray
-    }
-    axios.post(server_login_url, data, headers)
-    .then(response => {
-      console.log("[handleContentChange] success");
-    })
-    .catch(error => {
-      console.log("[handleContentChange] error" + error);
-    });
-  }
-
 	render() {
     const messageArray = this.state.messageArray;
     const renderAddMessage = this.renderAddMessage;
     const handleContentChange = this.handleContentChange;
+    const handleContentDelete = this.handleContentDelete;
 		return (
       <div>
         <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>編輯回應訊息(最多5則)</Header>
@@ -77,12 +107,12 @@ export default class EditReplies extends Component {
         <Segment.Group raised>
           {messageArray.map(function(message, index){
             return (
-              <EditReply key={index} idx={index} callback={handleContentChange}/>
+              <EditReply key={message._id} id={message._id} idx={index} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
             )
           })}
           {renderAddMessage()}
         </Segment.Group>
-        <Button floated='left' style={{color:'white', background:'#00B300', margin:'8px'}} onClick={this.handleSaveClicked}>儲存</Button>
+        <Button floated='left' style={{color:'white', background:'#00B300'}} onClick={this.handleSaveClicked}>儲存</Button>
       </div>
 		)
 	}

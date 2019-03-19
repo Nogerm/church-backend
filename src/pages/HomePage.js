@@ -13,7 +13,7 @@ export default class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: '修改圖文選單',
+      activeItem: 'time_info',
       hasSendRequest: true,
       hasLoggedIn: true,
       userId: "",
@@ -62,7 +62,11 @@ export default class HomePage extends Component {
     window.location.href = loginUrl;
   }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick = (e, { name, path }) => {
+    this.setState({ 
+      activeItem: path
+    })
+  }
 
   renderBody = () => {
     const { activeItem } = this.state
@@ -73,20 +77,20 @@ export default class HomePage extends Component {
         <Grid.Row columns={2}>
           <Grid.Column width={3}>
             <Menu fluid vertical tabular style={{fontFamily: 'Noto Sans TC'}}>
-              <Menu.Item name='修改圖文選單' active={activeItem === '修改圖文選單'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改聚會時間' active={activeItem === '修改聚會時間'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改交通資訊' active={activeItem === '修改交通資訊'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改主日信息影音' active={activeItem === '修改主日信息影音'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改官網/FB' active={activeItem === '修改官網/FB'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改小組聚會資訊' active={activeItem === '修改小組聚會資訊'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改週報/News' active={activeItem === '修改週報/News'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改加入好友' active={activeItem === '修改加入好友'} onClick={this.handleItemClick}/>
-              <Menu.Item name='修改今日聖言' active={activeItem === '修改今日聖言'} onClick={this.handleItemClick}/>
+              <Menu.Item name='修改圖文選單'    active={activeItem === 'rich_menu'}    path='rich_menu' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改聚會時間'    active={activeItem === 'time_info'}    path='time_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改交通資訊'    active={activeItem === 'traffic_info'} path='traffic_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改主日信息影音' active={activeItem === 'video_info'}   path='video_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改官網/FB'    active={activeItem === 'web_info/FB'}   path='web_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改小組聚會資訊' active={activeItem === 'group_info'}   path='group_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改週報/News'  active={activeItem === 'news_info'}     path='news_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改加入好友'    active={activeItem === 'friend_info'}  path='friend_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改今日聖言'    active={activeItem === 'article_info'} path='article_info' onClick={this.handleItemClick}/>
             </Menu>
           </Grid.Column>
 
           <Grid.Column stretched width={12}>
-            <EditReplies/>
+            <EditReplies path={activeItem}/>
           </Grid.Column>
         </Grid.Row>
       )

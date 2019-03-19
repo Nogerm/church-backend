@@ -1,6 +1,5 @@
 import React, { Component}  from 'react';
-import axios from 'axios';
-import { Image, Header, Button, Segment, Form, TextArea, Dropdown, Container } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Form, TextArea, Dropdown } from 'semantic-ui-react'
 
 export default class EditReply extends Component {
 
@@ -24,7 +23,11 @@ export default class EditReply extends Component {
   }
 
   handleCodeChange = (e, { value }) => {
-    this.props.callback(this.props.idx, value);
+    this.props.contentCallback(this.props.idx, value);
+  }
+
+  handleDeleteClicked = (e, { value }) => {
+    this.props.deleteCallback(this.props.id, value);
   }
 
   renderContent = () => {
@@ -59,6 +62,9 @@ export default class EditReply extends Component {
 
 		return (
       <Segment>
+        <Header as="h3">訊息#{this.props.idx+1}
+          <Button floated='right' style={{color:'white', background:'#d32f2f'}} onClick={this.handleDeleteClicked}>刪除</Button>
+        </Header>
         <p>1. 選擇要新增的訊息類別</p>
         <Dropdown placeholder='Select message type' options={msgTypeOptions} selection onChange={this.onTypeChange}></Dropdown>
         {renderContent()}

@@ -5,6 +5,7 @@
   "homepage": "https://nogerm.github.io/church-backend",
   "dependencies": {
     "axios": "^0.18.0",
+    "bson": "^4.0.2",
     "gh-pages": "^2.0.1",
     "jwt-decode": "^2.2.0",
     "query-string": "^6.3.0",
