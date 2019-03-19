@@ -14,8 +14,8 @@ export default class HomePage extends Component {
     super(props);
     this.state = {
       activeItem: 'time_info',
-      hasSendRequest: true,
-      hasLoggedIn: true,
+      hasSendRequest: false,
+      hasLoggedIn: false,
       userId: "",
       userName: "尚未登入",
       userImageUrl: userDefaultImg
@@ -81,7 +81,7 @@ export default class HomePage extends Component {
               <Menu.Item name='修改聚會時間'    active={activeItem === 'time_info'}    path='time_info' onClick={this.handleItemClick}/>
               <Menu.Item name='修改交通資訊'    active={activeItem === 'traffic_info'} path='traffic_info' onClick={this.handleItemClick}/>
               <Menu.Item name='修改主日信息影音' active={activeItem === 'video_info'}   path='video_info' onClick={this.handleItemClick}/>
-              <Menu.Item name='修改官網/FB'    active={activeItem === 'web_info/FB'}   path='web_info' onClick={this.handleItemClick}/>
+              <Menu.Item name='修改官網/FB'    active={activeItem === 'web_info'}     path='web_info' onClick={this.handleItemClick}/>
               <Menu.Item name='修改小組聚會資訊' active={activeItem === 'group_info'}   path='group_info' onClick={this.handleItemClick}/>
               <Menu.Item name='修改週報/News'  active={activeItem === 'news_info'}     path='news_info' onClick={this.handleItemClick}/>
               <Menu.Item name='修改加入好友'    active={activeItem === 'friend_info'}  path='friend_info' onClick={this.handleItemClick}/>
