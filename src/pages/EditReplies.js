@@ -12,7 +12,9 @@ export default class EditReplies extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-      messageArray: []
+      messageArray: [],
+      replyEditArray: [],
+      hasAnyError: false
     };
   }
 
@@ -25,9 +27,9 @@ export default class EditReplies extends Component {
     axios.get(get_url)
     .then(response => {
       console.log("[queryReplyMsg] success" + JSON.stringify(response));
-      this.setState({
-        messageArray: response.data
-      });
+      //this.setState({
+      //  messageArray: response.data
+      //});
     })
     .catch(error => {
       console.log("[queryReplyMsg] error" + error);
@@ -58,17 +60,40 @@ export default class EditReplies extends Component {
     });
   }
 
-  handleContentChange = (id, newContent) => {
-    const newArray = [...this.state.messageArray]
-    newArray.splice(id, 1, JSON.parse(newContent));
+  handleContentChange = (id, jsonState) => {
+    const newArray = [...this.state.replyEditArray]
+    const updateIdx = newArray.findIndex(item => item._id === id);
+    newArray.splice(updateIdx, 1, jsonState);
     this.setState({
-      messageArray: [...newArray]
-    }, () => {
-      console.log("handleContentChange: " + this.state.messageArray);
+      replyEditArray: [...newArray]
     });
   }
 
   handleSaveClicked = () => {
+    //check json valid
+    let hasError = false;
+    let msgArray = [...this.state.messageArray];
+    for(let idx = 0; idx < this.state.replyEditArray.length; idx++) {
+      const reply = this.state.replyEditArray[idx];
+      console.log("Reply: " + JSON.stringify(reply));
+      if(reply.error !== false) {
+        hasError = true;
+      } else {
+        msgArray.splice(idx, 1, reply.jsObject);
+      }
+    }
+    this.setState({
+      hasAnyError: hasError,
+      messageArray: msgArray
+    }, () => {
+      console.log("Check result has error: " + this.state.hasAnyError);
+      if(!this.state.hasAnyError) {
+        this.sendUpdateRequest();
+      }
+    });
+  }
+
+  sendUpdateRequest = () => {
     const post_url = BASE_URL + this.props.path;
     const headers = {
       'content-type': 'application/json'
@@ -78,10 +103,10 @@ export default class EditReplies extends Component {
     }
     axios.post(post_url, data, headers)
     .then(response => {
-      console.log("[handleContentChange] success");
+      console.log("[sendUpdateRequest] success");
     })
     .catch(error => {
-      console.log("[handleContentChange] error" + error);
+      console.log("[sendUpdateRequest] error" + error);
     });
   }
 

@@ -1,5 +1,7 @@
 import React, { Component}  from 'react';
 import { Image, Header, Button, Segment, Form, TextArea, Dropdown } from 'semantic-ui-react'
+import JSONInput from 'react-json-editor-ajrm';
+import locale    from 'react-json-editor-ajrm/locale/en';
 
 export default class EditReply extends Component {
 
@@ -21,25 +23,36 @@ export default class EditReply extends Component {
   onRemoveMsg = () => {
     //remove this message
   }
-
+/*
   handleCodeChange = (e, { value }) => {
     this.props.contentCallback(this.props.idx, value);
   }
-
+*/
   handleDeleteClicked = (e, { value }) => {
     this.props.deleteCallback(this.props.id, value);
   }
 
+  handleJSONChange = (e) => {
+    //console.log("event" + JSON.stringify(e));
+    this.props.contentCallback(this.props.id, e);
+  }
+
   renderContent = () => {
+    const handleJSONChange = this.handleJSONChange;
+    const placeholder = {"type":"text", "text":"123"}
     if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
         <div>
           <p>2. 使用 Bot Designer 設計好訊息</p>
           <p>3. 複製貼上 Bot Designer 產生的程式</p>
-          <Form>
-            <TextArea placeholder='貼上程式碼' style={{ minHeight: 100 }} onChange={this.handleCodeChange}/>
-          </Form>
+          <JSONInput
+            id          = 'a_unique_id'
+            placeholder = { placeholder }
+            locale      = { locale }
+            height      = '100px'
+            onChange    = {handleJSONChange}
+          />
         </div>
         
       )
