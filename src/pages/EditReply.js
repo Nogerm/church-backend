@@ -39,7 +39,7 @@ export default class EditReply extends Component {
 
   renderContent = () => {
     const handleJSONChange = this.handleJSONChange;
-    const placeholder = this.props.default || {"type":"text", "text":"123"}
+    const placeholder = this.props.default || {"type":"text", "text":"您好！"}
     if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
