@@ -42,7 +42,9 @@ export default class EditReply extends Component {
     if(parseInt(file.size) < 1000) {
       //size OK
       this.setState({ 
-        file: file
+        file: file,
+        fileUrl: "",
+        filePreviewUrl: ""
       });
       if(this.state.type === 'image') {
         //upload image, get url and preview url
@@ -100,16 +102,15 @@ export default class EditReply extends Component {
         
       )
     } else if(this.state.type === "image") {
-      const fileUrl = this.state.fileUrl === "" ? "尚未上傳完成" : this.state.fileUrl;
-      const filePreviewUrl = this.state.filePreviewUrl === "" ? "尚未上傳完成" : this.state.filePreviewUrl;
-      const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : "";
+      const fileUrl = this.state.fileUrl === "" ? this.props.defaultContent.hasOwnProperty("originalContentUrl") ? this.props.defaultContent.originalContentUrl : "尚未上傳完成" : this.state.fileUrl;
+      const filePreviewUrl = this.state.filePreviewUrl === "" ? this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "尚未上傳完成" : this.state.filePreviewUrl;
+      const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
         <div>
           <p>2. 選擇要上傳的圖片 (必須小於1Mb)</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium' />
           <p>3. 等待上傳後，伺服器回傳圖片網址</p>
-          <p>{fileUrl}</p>
           <List divided selection>
             <List.Item>
               <Label horizontal>originalContentUrl</Label>
