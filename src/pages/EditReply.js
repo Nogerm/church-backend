@@ -1,8 +1,11 @@
 import React, { Component}  from 'react';
-import { Image, Header, Button, Segment, Dropdown, Icon } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Dropdown, List, Label } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
+import axios from 'axios';
+
+const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
 
 export default class EditReply extends Component {
 
@@ -11,7 +14,8 @@ export default class EditReply extends Component {
     this.state = {
       type: this.props.type || "",
       file: {},
-      fileUrl: ""
+      fileUrl: "",
+      filePreviewUrl: ""
     };
   }
 
@@ -40,6 +44,30 @@ export default class EditReply extends Component {
       this.setState({ 
         file: file
       });
+      if(this.state.type === 'image') {
+        //upload image, get url and preview url
+        const post_url = BASE_URL + 'image_upload';
+        const headers = {
+          'content-type': 'application/json'
+        }
+        const data = {
+          name: file.name,
+          binary: file.base64
+        }
+        axios.post(post_url, data, headers)
+        .then(response => {
+          console.log("[sendUpdateRequest] success");
+          alert("檔案上傳成功！");
+          this.setState({ 
+            fileUrl: response.data.fileUrl,
+            filePreviewUrl: response.data.filePreviewUrl
+          });
+        })
+        .catch(error => {
+          console.log("[sendUpdateRequest] error" + error);
+          alert("檔案上傳失敗，錯誤訊息：" + error);
+        });
+      }
     } else {
       alert("檔案超過 1Mb!");
     }
@@ -60,40 +88,39 @@ export default class EditReply extends Component {
   }
 
   renderContent = () => {
-    const handleJSONChange = this.handleJSONChange;
-    const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : this.getTemplateFromType(this.state.type)
+
+    
     if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
         <div>
           <p>2. 使用 Bot Designer 設計好訊息</p>
           <p>3. 複製貼上 Bot Designer 產生的程式</p>
-          <JSONInput
-            id          = { this.props.id }
-            placeholder = { placeholder }
-            locale      = { locale }
-            height      = '100px'
-            onChange    = { handleJSONChange }
-          />
         </div>
         
       )
     } else if(this.state.type === "image") {
       const fileUrl = this.state.fileUrl === "" ? "尚未上傳完成" : this.state.fileUrl;
+      const filePreviewUrl = this.state.filePreviewUrl === "" ? "尚未上傳完成" : this.state.filePreviewUrl;
+      const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : "";
       return (
         <div>
           <p>2. 選擇要上傳的圖片 (必須小於1Mb)</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
+          <Image src={imageSrc} size='medium' />
           <p>3. 等待上傳後，伺服器回傳圖片網址</p>
           <p>{fileUrl}</p>
-          <p>4. 複製貼上 Bot Designer 產生的程式，並將 originalContentUrl 和 previewImageUrl 取代</p>
-          <JSONInput
-            id          = { this.props.id }
-            placeholder = { placeholder }
-            locale      = { locale }
-            height      = '100px'
-            onChange    = { handleJSONChange }
-          />
+          <List divided selection>
+            <List.Item>
+              <Label horizontal>originalContentUrl</Label>
+              {fileUrl}
+            </List.Item>
+            <List.Item>
+              <Label horizontal>previewImageUrl</Label>
+              {filePreviewUrl}
+            </List.Item>
+          </List>
+          <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>originalContentUrl</Label> 和 <Label>previewImageUrl</Label> 取代</div>
         </div>
       )
     } else if(this.state.type === "video") {
@@ -133,15 +160,26 @@ export default class EditReply extends Component {
       { key: 'buttons',  text: '按鍵範本', value: 'buttons' },
       { key: 'carousel', text: '輪播範本', value: 'carousel' }
     ];
+    const handleJSONChange = this.handleJSONChange;
+    const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : this.getTemplateFromType(this.state.type);
 
-		return (
+    return (
       <Segment>
         <Header as="h3">訊息#{this.props.idx+1}
           <Button floated='right' style={{color:'white', background:'#d32f2f'}} onClick={this.handleDeleteClicked}>刪除</Button>
         </Header>
+        <Segment placeholder>
         <p>1. 選擇要新增的訊息類別</p>
-        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.defaultContent.type} onChange={this.onTypeChange}></Dropdown>
+        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.defaultContent.type} onChange={this.onTypeChange} style={{ width:"200px" }}></Dropdown>
         {renderContent()}
+        <JSONInput
+          id          = { this.props.id }
+          placeholder = { placeholder }
+          locale      = { locale }
+          height      = '100px'
+          onChange    = { handleJSONChange }
+        />
+        </Segment>
       </Segment>
 		)
 	}

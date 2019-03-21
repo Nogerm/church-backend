@@ -110,6 +110,7 @@ export default class EditReplies extends Component {
       messageArray: msgArray
     }, () => {
       console.log("Check result has error: " + this.state.hasAnyError);
+      console.log("query array: " + JSON.stringify(queryArray));
       if(!this.state.hasAnyError) {
         this.sendUpdateRequest(queryArray);
       } else {
