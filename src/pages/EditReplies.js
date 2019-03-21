@@ -39,12 +39,14 @@ export default class EditReplies extends Component {
   addReplyMsg = () => {
     if(this.state.messageArray.length < MAX_REPLY_NUM) {
       const newMessage = {
-        _id: new ObjectID().id
+        _id: new ObjectID().toHexString(),
+        type: "text",
+        text: ""
       }
       this.setState({
         messageArray: [...this.state.messageArray, newMessage]
       }, () => {
-        console.log("add message id: " + newMessage._id);
+        console.log("add message id: " + JSON.stringify(newMessage));
       });
     }
   }
