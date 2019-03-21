@@ -112,6 +112,8 @@ export default class EditReplies extends Component {
       console.log("Check result has error: " + this.state.hasAnyError);
       if(!this.state.hasAnyError) {
         this.sendUpdateRequest(queryArray);
+      } else {
+        alert("訊息格式錯誤，請先修正再儲存");
       }
     });
   }
@@ -127,9 +129,11 @@ export default class EditReplies extends Component {
     axios.post(post_url, data, headers)
     .then(response => {
       console.log("[sendUpdateRequest] success");
+      alert("訊息儲存成功！");
     })
     .catch(error => {
       console.log("[sendUpdateRequest] error" + error);
+      alert("訊息儲存失敗，錯誤訊息：" + error);
     });
   }
 
@@ -154,7 +158,7 @@ export default class EditReplies extends Component {
         <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 或 flex simulator 使用</p>
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         <br/>
-        <a href="https://developers.line.biz/console/fx/" rel="noopener noreferrer" target="_blank" title="Flex simulator 下載連結">Flex simulator 下載連結</a>
+        <a href="https://developers.line.biz/console/fx/" rel="noopener noreferrer" target="_blank" title="Flex simulator 線上編輯器">Flex simulator 線上編輯器</a>
         <Segment.Group raised>
           {messageArray.map(function(messageObj, index){
             return (
