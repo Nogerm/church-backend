@@ -12,7 +12,6 @@ export default class EditReplies extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-      queryArray: [],
       messageArray: [],
       replyEditArray: [],
       hasAnyError: false
@@ -29,7 +28,7 @@ export default class EditReplies extends Component {
     .then(response => {
       console.log("[queryReplyMsg] success" + JSON.stringify(response));
       this.setState({
-        queryArray: response.data
+        messageArray: response.data
       });
     })
     .catch(error => {
@@ -122,7 +121,6 @@ export default class EditReplies extends Component {
   }
 
 	render() {
-    const queryArray = this.state.queryArray;
     const messageArray = this.state.messageArray;
     const renderAddMessage = this.renderAddMessage;
     const handleContentChange = this.handleContentChange;
@@ -137,7 +135,7 @@ export default class EditReplies extends Component {
         <Segment.Group raised>
           {messageArray.map(function(message, index){
             return (
-              <EditReply key={message._id} id={message._id} idx={index} type={message.type} default={queryArray[index]} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
+              <EditReply key={message._id} id={message._id} idx={index} type={message.type} default={messageArray[index]} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
             )
           })}
           {renderAddMessage()}

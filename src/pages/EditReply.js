@@ -1,5 +1,5 @@
 import React, { Component}  from 'react';
-import { Image, Header, Button, Segment, Form, TextArea, Dropdown } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Dropdown } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 
@@ -20,14 +20,6 @@ export default class EditReply extends Component {
     })
   }
 
-  onRemoveMsg = () => {
-    //remove this message
-  }
-/*
-  handleCodeChange = (e, { value }) => {
-    this.props.contentCallback(this.props.idx, value);
-  }
-*/
   handleDeleteClicked = (e, { value }) => {
     this.props.deleteCallback(this.props.id, value);
   }
@@ -51,7 +43,7 @@ export default class EditReply extends Component {
             placeholder = { placeholder }
             locale      = { locale }
             height      = '100px'
-            onChange    = {handleJSONChange}
+            onChange    = { handleJSONChange }
           />
         </div>
         
@@ -104,7 +96,7 @@ export default class EditReply extends Component {
           <Button floated='right' style={{color:'white', background:'#d32f2f'}} onClick={this.handleDeleteClicked}>刪除</Button>
         </Header>
         <p>1. 選擇要新增的訊息類別</p>
-        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection onChange={this.onTypeChange}></Dropdown>
+        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.default.type} onChange={this.onTypeChange}></Dropdown>
         {renderContent()}
       </Segment>
 		)
