@@ -29,9 +29,23 @@ export default class EditReply extends Component {
     this.props.contentCallback(this.props.id, e);
   }
 
+  getTemplateFromType = (type) => {
+    if      (type === 'text')     return {"type":"text", "text":"您好！"}
+    else if (type === 'image')    return {"type": "image", "originalContentUrl": "https://example.com/original.jpg", "previewImageUrl": "https://example.com/preview.jpg"}
+    else if (type === 'video')    return {"type": "video", "originalContentUrl": "https://example.com/original.mp4", "previewImageUrl": "https://example.com/preview.jpg"}
+    else if (type === 'audio')    return {"type": "audio", "originalContentUrl": "https://example.com/original.m4a", "duration": 60000}
+    else if (type === 'sticker')  return {"type": "sticker", "packageId": "1", "stickerId": "1"}
+    else if (type === 'imagemap') return {"type":"imagemap", "baseUrl":"https://example.com/", "altText": "This is an imagemap", "actions": ""}
+    else if (type === 'location') return {"type": "location", "title": "my location", "address": "〒150-0002 東京都渋谷区渋谷２丁目２１−１", "latitude": 35.65910807942215, "longitude": 139.70372892916203}
+    else if (type === 'confirm')  return {"type":"template", "template":""}
+    else if (type === 'buttons')  return {"type":"template", "template":""}
+    else if (type === 'carousel') return {"type":"template", "template":""}
+    else return {}
+  }
+
   renderContent = () => {
     const handleJSONChange = this.handleJSONChange;
-    const placeholder = this.props.default || {"type":"text", "text":"您好！"}
+    const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : this.getTemplateFromType(this.state.type)
     if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
@@ -96,7 +110,7 @@ export default class EditReply extends Component {
           <Button floated='right' style={{color:'white', background:'#d32f2f'}} onClick={this.handleDeleteClicked}>刪除</Button>
         </Header>
         <p>1. 選擇要新增的訊息類別</p>
-        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.default.type} onChange={this.onTypeChange}></Dropdown>
+        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.defaultContent.type} onChange={this.onTypeChange}></Dropdown>
         {renderContent()}
       </Segment>
 		)
