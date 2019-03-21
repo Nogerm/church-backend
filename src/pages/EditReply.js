@@ -1,14 +1,17 @@
 import React, { Component}  from 'react';
-import { Image, Header, Button, Segment, Dropdown } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Dropdown, Icon } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
+import FileBase64 from 'react-file-base64';
 
 export default class EditReply extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      type: this.props.type || ""
+      type: this.props.type || "",
+      file: {},
+      fileUrl: ""
     };
   }
 
@@ -27,6 +30,19 @@ export default class EditReply extends Component {
   handleJSONChange = (e) => {
     //console.log("event" + JSON.stringify(e));
     this.props.contentCallback(this.props.id, e);
+  }
+
+  handleFileChange = (file) => {
+    console.log(JSON.stringify(file));
+    console.log("size:" + parseInt(file.size));
+    if(parseInt(file.size) < 1000) {
+      //size OK
+      this.setState({ 
+        file: file
+      });
+    } else {
+      alert("檔案超過 1Mb!");
+    }
   }
 
   getTemplateFromType = (type) => {
@@ -53,7 +69,7 @@ export default class EditReply extends Component {
           <p>2. 使用 Bot Designer 設計好訊息</p>
           <p>3. 複製貼上 Bot Designer 產生的程式</p>
           <JSONInput
-            id          = 'a_unique_id'
+            id          = { this.props.id }
             placeholder = { placeholder }
             locale      = { locale }
             height      = '100px'
@@ -63,8 +79,22 @@ export default class EditReply extends Component {
         
       )
     } else if(this.state.type === "image") {
+      const fileUrl = this.state.fileUrl === "" ? "尚未上傳完成" : this.state.fileUrl;
       return (
-        <div></div>
+        <div>
+          <p>2. 選擇要上傳的圖片 (必須小於1Mb)</p>
+          <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
+          <p>3. 等待上傳後，伺服器回傳圖片網址</p>
+          <p>{fileUrl}</p>
+          <p>4. 複製貼上 Bot Designer 產生的程式，並將 originalContentUrl 和 previewImageUrl 取代</p>
+          <JSONInput
+            id          = { this.props.id }
+            placeholder = { placeholder }
+            locale      = { locale }
+            height      = '100px'
+            onChange    = { handleJSONChange }
+          />
+        </div>
       )
     } else if(this.state.type === "video") {
       return (
