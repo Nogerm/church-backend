@@ -13,7 +13,6 @@ export default class EditReplies extends Component {
     super(props);
     this.state = {
       messageArray: [],
-      replyEditArray: [],
       hasAnyError: false
     };
   }
@@ -27,8 +26,17 @@ export default class EditReplies extends Component {
     axios.get(get_url)
     .then(response => {
       console.log("[queryReplyMsg] success" + JSON.stringify(response));
+      let initArray = [];
+      for (var idx = 0; idx < response.data.length; idx++) {
+        const messageObj = {
+          _id: response.data[idx]._id,
+          content: response.data[idx],
+          editContent: ""
+        }
+        initArray.push(messageObj);
+      }
       this.setState({
-        messageArray: response.data
+        messageArray: initArray
       });
     })
     .catch(error => {
@@ -43,31 +51,38 @@ export default class EditReplies extends Component {
         type: "text",
         text: ""
       }
+      const messageObj = {
+        _id: newMessage._id,
+        content: newMessage,
+        editContent: ""
+      }
       this.setState({
-        messageArray: [...this.state.messageArray, newMessage]
+        messageArray: [...this.state.messageArray, messageObj]
       }, () => {
-        console.log("add message id: " + JSON.stringify(newMessage));
+        console.log("add message: " + JSON.stringify(messageObj));
       });
     }
   }
 
   handleContentDelete = (id) => {
-    const newArray = [...this.state.messageArray]
-    const deleteIdx = newArray.findIndex(item => item._id === id);
-    newArray.splice(deleteIdx, 1);
+    const newMessageArray = [...this.state.messageArray];
+    const deleteIdx = newMessageArray.findIndex(item => item._id === id);
+    newMessageArray.splice(deleteIdx, 1);
     this.setState({
-      messageArray: [...newArray]
+      messageArray: [...newMessageArray]
     }, () => {
       console.log("Delete message id: " + id);
     });
   }
 
   handleContentChange = (id, jsonState) => {
-    const newArray = [...this.state.replyEditArray]
-    const updateIdx = newArray.findIndex(item => item._id === id);
-    newArray.splice(updateIdx, 1, jsonState);
+    const newMessageArray = [...this.state.messageArray]
+    const updateIdx = newMessageArray.findIndex(item => item._id === id);
+    const updateObj = newMessageArray.find(item => item._id === id);
+    updateObj.editContent = jsonState;
+    newMessageArray.splice(updateIdx, 1, updateObj);
     this.setState({
-      replyEditArray: [...newArray]
+      messageArray: [...newMessageArray]
     });
   }
 
@@ -75,14 +90,20 @@ export default class EditReplies extends Component {
     //check json valid
     let hasError = false;
     let msgArray = [...this.state.messageArray];
-    for(let idx = 0; idx < this.state.replyEditArray.length; idx++) {
-      const reply = this.state.replyEditArray[idx];
-      console.log("Reply: " + JSON.stringify(reply));
-      if(reply.error !== false) {
-        hasError = true;
+    let queryArray = [];
+    for(let idx = 0; idx < this.state.messageArray.length; idx++) {
+      let msgObj = this.state.messageArray[idx];
+      if(msgObj.editContent === "") {
+        //not edited
       } else {
-        msgArray.splice(idx, 1, reply.jsObject);
+        if(msgObj.editContent.error !== false) {
+          hasError = true;
+        } else {
+          msgObj.content = msgObj.editContent.jsObject;
+          msgArray.splice(idx, 1, msgObj);
+        }
       }
+      queryArray.push(msgObj.content);
     }
     this.setState({
       hasAnyError: hasError,
@@ -90,18 +111,18 @@ export default class EditReplies extends Component {
     }, () => {
       console.log("Check result has error: " + this.state.hasAnyError);
       if(!this.state.hasAnyError) {
-        this.sendUpdateRequest();
+        this.sendUpdateRequest(queryArray);
       }
     });
   }
 
-  sendUpdateRequest = () => {
+  sendUpdateRequest = (queryArray) => {
     const post_url = BASE_URL + this.props.path;
     const headers = {
       'content-type': 'application/json'
     }
     const data = {
-      messages: this.state.messageArray
+      messages: queryArray
     }
     axios.post(post_url, data, headers)
     .then(response => {
@@ -135,9 +156,9 @@ export default class EditReplies extends Component {
         <br/>
         <a href="https://developers.line.biz/console/fx/" rel="noopener noreferrer" target="_blank" title="Flex simulator 下載連結">Flex simulator 下載連結</a>
         <Segment.Group raised>
-          {messageArray.map(function(message, index){
+          {messageArray.map(function(messageObj, index){
             return (
-              <EditReply key={message._id} id={message._id} idx={index} type={message.type} default={messageArray[index]} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
+              <EditReply key={messageObj._id} id={messageObj._id} idx={index} type={messageObj.content.type} default={messageArray[index].content} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
             )
           })}
           {renderAddMessage()}
