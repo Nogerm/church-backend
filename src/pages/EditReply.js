@@ -170,6 +170,7 @@ export default class EditReply extends Component {
             </List.Item>
           </List>
           <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>baseUrl</Label> 取代</div>
+          <div>5. <Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
         </div>
       )
     } else if(this.state.type === "buttons") {
