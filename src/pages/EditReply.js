@@ -15,7 +15,9 @@ export default class EditReply extends Component {
       type: this.props.type || "",
       file: {},
       fileUrl: "",
-      filePreviewUrl: ""
+      filePreviewUrl: "",
+      fileBaseUrl: "",
+      thumbHeight: ""
     };
   }
 
@@ -69,6 +71,28 @@ export default class EditReply extends Component {
           console.log("[sendUpdateRequest] error" + error);
           alert("檔案上傳失敗，錯誤訊息：" + error);
         });
+      } else if(this.state.type === 'imagemap') {
+        //upload image, get base url
+        const post_url = BASE_URL + 'imagemap_image_upload';
+        const headers = {
+          'content-type': 'application/json'
+        }
+        const data = {
+          binary: file.base64
+        }
+        axios.post(post_url, data, headers)
+        .then(response => {
+          console.log("[sendUpdateRequest] success");
+          alert("檔案上傳成功！");
+          this.setState({ 
+            fileBaseUrl: response.data.file_base_url,
+            thumbHeight: response.data.thumb_height
+          });
+        })
+        .catch(error => {
+          console.log("[sendUpdateRequest] error" + error);
+          alert("檔案上傳失敗，錯誤訊息：" + error);
+        });
       }
     } else {
       alert("檔案超過 1Mb!");
@@ -90,8 +114,6 @@ export default class EditReply extends Component {
   }
 
   renderContent = () => {
-
-    
     if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
@@ -133,8 +155,22 @@ export default class EditReply extends Component {
         <div></div>
       )
     } else if(this.state.type === "imagemap") {
+      const fileBaseUrl = this.state.fileBaseUrl === "" ? this.props.defaultContent.hasOwnProperty("baseUrl") ? this.props.defaultContent.baseUrl : "尚未上傳完成" : this.state.fileBaseUrl;
+      const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
-        <div></div>
+        <div>
+          <p>2. 選擇要上傳的圖片</p>
+          <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
+          <Image src={imageSrc} size='medium' />
+          <p>3. 等待上傳後，伺服器回傳圖片網址</p>
+          <List divided selection>
+            <List.Item>
+              <Label horizontal>baseUrl</Label>
+              {fileBaseUrl}
+            </List.Item>
+          </List>
+          <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>baseUrl</Label> 取代</div>
+        </div>
       )
     } else if(this.state.type === "buttons") {
       return (
