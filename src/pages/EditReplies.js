@@ -160,14 +160,12 @@ export default class EditReplies extends Component {
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         <br/>
         <a href="https://developers.line.biz/console/fx/" rel="noopener noreferrer" target="_blank" title="Flex simulator 線上編輯器">Flex simulator 線上編輯器</a>
-        <Segment.Group raised>
-          {messageArray.map(function(messageObj, index){
-            return (
-              <EditReply key={messageObj._id} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
-            )
-          })}
-          {renderAddMessage()}
-        </Segment.Group>
+        {messageArray.map(function(messageObj, index){
+          return (
+            <EditReply key={messageObj._id} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
+          )
+        })}
+        {renderAddMessage()}
         <Button floated='left' style={{color:'white', background:'#00B300'}} onClick={this.handleSaveClicked}>儲存</Button>
       </div>
 		)

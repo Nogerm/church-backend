@@ -1,5 +1,5 @@
 import React, { Component}  from 'react';
-import { Image, Header, Button, Segment, Dropdown, List, Label } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Dropdown, List, Label, Divider } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
@@ -114,14 +114,23 @@ export default class EditReply extends Component {
   }
 
   renderContent = () => {
+    const handleJSONChange = this.handleJSONChange;
+    const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : this.getTemplateFromType(this.state.type);
+
     if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
         <div>
           <p>2. 使用 Bot Designer 設計好訊息</p>
           <p>3. 複製貼上 Bot Designer 產生的程式</p>
+          <JSONInput
+            id          = { this.props.id }
+            placeholder = { placeholder }
+            locale      = { locale }
+            height      = '100px'
+            onChange    = { handleJSONChange }
+          />
         </div>
-        
       )
     } else if(this.state.type === "image") {
       const fileUrl = this.state.fileUrl === "" ? this.props.defaultContent.hasOwnProperty("originalContentUrl") ? this.props.defaultContent.originalContentUrl : "尚未上傳完成" : this.state.fileUrl;
@@ -144,6 +153,13 @@ export default class EditReply extends Component {
             </List.Item>
           </List>
           <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>originalContentUrl</Label> 和 <Label>previewImageUrl</Label> 取代</div>
+          <JSONInput
+            id          = { this.props.id }
+            placeholder = { placeholder }
+            locale      = { locale }
+            height      = '100px'
+            onChange    = { handleJSONChange }
+          />
         </div>
       )
     } else if(this.state.type === "video") {
@@ -171,6 +187,13 @@ export default class EditReply extends Component {
           </List>
           <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>baseUrl</Label> 取代</div>
           <div>5. <Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
+          <JSONInput
+          id          = { this.props.id }
+          placeholder = { placeholder }
+          locale      = { locale }
+          height      = '100px'
+          onChange    = { handleJSONChange }
+        />
         </div>
       )
     } else if(this.state.type === "buttons") {
@@ -198,26 +221,16 @@ export default class EditReply extends Component {
       { key: 'buttons',  text: '按鍵範本', value: 'buttons' },
       { key: 'carousel', text: '輪播範本', value: 'carousel' }
     ];
-    const handleJSONChange = this.handleJSONChange;
-    const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : this.getTemplateFromType(this.state.type);
 
     return (
-      <Segment>
+      <Segment raised>
         <Header as="h3">訊息#{this.props.idx+1}
           <Button floated='right' style={{color:'white', background:'#d32f2f'}} onClick={this.handleDeleteClicked}>刪除</Button>
         </Header>
-        <Segment placeholder>
+        <Divider/>
         <p>1. 選擇要新增的訊息類別</p>
         <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.defaultContent.type} onChange={this.onTypeChange} style={{ width:"200px" }}></Dropdown>
         {renderContent()}
-        <JSONInput
-          id          = { this.props.id }
-          placeholder = { placeholder }
-          locale      = { locale }
-          height      = '100px'
-          onChange    = { handleJSONChange }
-        />
-        </Segment>
       </Segment>
 		)
 	}
