@@ -7,6 +7,7 @@ import lineLogo from './LINE@_APP_typeA.png';
 import userDefaultImg from './user_default.png';
 import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-react'
 import EditReplies from './EditReplies';
+import EditRichMenu from './EditRichMenu';
 
 export default class HomePage extends Component {
 
@@ -43,6 +44,7 @@ export default class HomePage extends Component {
       axios.post(server_login_url, data, headers)
       .then(response => {
         const decoded = jwt_decode(response.data.id_token);
+        console.log("[login]\ndecode: " + JSON.stringify(decoded));
         console.log("[login]\nuser id: " + decoded.sub + "\nuser name: " + decoded.name + "\nuser image url: " + decoded.picture);
         this.setState({
           userId: decoded.sub || "",
@@ -58,7 +60,14 @@ export default class HomePage extends Component {
   }
 
   handleLoginClicked = () => {
-    const loginUrl = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554176659&redirect_uri=https://nogerm.github.io/church-backend&state=1234&scope=openid%20profile";
+    const requestUrl = "https://access.line.me/oauth2/v2.1/authorize";
+    const channelId = "1554176659";
+    const redirectUri = "https://nogerm.github.io/church-backend";
+    const state = "12345";
+    const nonce = "54321";
+    const maxAge = 30 * 60;
+
+    const loginUrl = requestUrl + "?response_type=code&client_id=" + channelId + "&redirect_uri=" + redirectUri + "&state=" + state + "&scope=openid%20profile&nonce=" + nonce + "&max_age=" + maxAge.toString();
     window.location.href = loginUrl;
   }
 
@@ -68,10 +77,16 @@ export default class HomePage extends Component {
     })
   }
 
+  renderBodyContent = () => {
+    if(this.state.activeItem === 'rich_menu') return <EditRichMenu/>
+    else return <EditReplies path={this.state.activeItem}/>
+  }
+
   renderBody = () => {
     const { activeItem } = this.state
     const hasSendRequest = this.state.hasSendRequest;
     const hasLoggedIn = this.state.hasLoggedIn;
+    const renderBodyContent = this.renderBodyContent;
     if(hasSendRequest && hasLoggedIn) {
       return (
         <Grid.Row columns={2}>
@@ -90,7 +105,7 @@ export default class HomePage extends Component {
           </Grid.Column>
 
           <Grid.Column stretched width={12}>
-            <EditReplies path={activeItem}/>
+            {renderBodyContent()}
           </Grid.Column>
         </Grid.Row>
       )

@@ -188,12 +188,12 @@ export default class EditReply extends Component {
           <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>baseUrl</Label> 取代</div>
           <div>5. <Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
           <JSONInput
-          id          = { this.props.id }
-          placeholder = { placeholder }
-          locale      = { locale }
-          height      = '100px'
-          onChange    = { handleJSONChange }
-        />
+            id          = { this.props.id }
+            placeholder = { placeholder }
+            locale      = { locale }
+            height      = '100px'
+            onChange    = { handleJSONChange }
+          />
         </div>
       )
     } else if(this.state.type === "buttons") {
