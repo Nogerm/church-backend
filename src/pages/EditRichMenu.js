@@ -70,7 +70,7 @@ export default class EditRichMenu extends Component {
             id          = { this.props.id }
             placeholder = { placeholder }
             locale      = { locale }
-            height      = '100px'
+            height      = '300px'
             onChange    = { handleJSONChange }
           />
 					<p>3. 選擇圖文選單的背景圖片（必須為 2500x1686 or 2500x843）</p>
