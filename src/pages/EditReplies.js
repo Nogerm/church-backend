@@ -121,13 +121,15 @@ export default class EditReplies extends Component {
 
   sendUpdateRequest = (queryArray) => {
     const post_url = BASE_URL + this.props.path;
-    const headers = {
-      'content-type': 'application/json'
+    const configs = {
+      headers: {
+        'content-type': 'application/json'
+      }
     }
     const data = {
       messages: queryArray
     }
-    axios.post(post_url, data, headers)
+    axios.post(post_url, data, configs)
     .then(response => {
       console.log("[sendUpdateRequest] success");
       alert("訊息儲存成功！");

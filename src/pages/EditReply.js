@@ -51,14 +51,16 @@ export default class EditReply extends Component {
       if(this.state.type === 'image') {
         //upload image, get url and preview url
         const post_url = BASE_URL + 'image_upload';
-        const headers = {
-          'content-type': 'application/json'
+        const configs = {
+          headers:{
+            'content-type': 'application/json'
+          }
         }
         const data = {
           name: file.name,
           binary: file.base64
         }
-        axios.post(post_url, data, headers)
+        axios.post(post_url, data, configs)
         .then(response => {
           console.log("[sendUpdateRequest] success");
           alert("檔案上傳成功！");
@@ -74,13 +76,15 @@ export default class EditReply extends Component {
       } else if(this.state.type === 'imagemap') {
         //upload image, get base url
         const post_url = BASE_URL + 'imagemap_image_upload';
-        const headers = {
-          'content-type': 'application/json'
+        const configs = {
+          headers: {
+            'content-type': 'application/json'
+          }
         }
         const data = {
           binary: file.base64
         }
-        axios.post(post_url, data, headers)
+        axios.post(post_url, data, configs)
         .then(response => {
           console.log("[sendUpdateRequest] success");
           alert("檔案上傳成功！");
