@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import axios from 'axios';
-import { Header, Segment, Divider, Button } from 'semantic-ui-react';
+import { Header, Segment, Divider } from 'semantic-ui-react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
@@ -50,31 +50,12 @@ export default class EditRichMenu extends Component {
 			menu: e.jsObject
 		});
 	}
-	
-	handleClick = () => {
-		const post_url = 'https://api.line.me/v2/bot/richmenu';
-		const configs = {
-			headers: {
-				'Authorization': "Bearer 3URuNJYvx7YzdKdH1+U732IVCIEQmAJVXNOxaHAb2gX4wF9cwTjtzAqWsMrr+3NBA7HfMsEhj8BC6Fua/F+x6jsV7g9xctFCxY6Oh/mG1mBIKRHZ65T0fREPV+8xX+ca25T/9PsBoS0qqDjvBsbA4gdB04t89/1O/w1cDnyilFU=",
-				'content-type': 'application/json'
-			}
-		}
-		const data = this.state.menu;
-		axios.post(post_url, data, configs)
-		.then((result) => {
-			console.log("[create_rich_menu_for_all] success");
-		})
-		.catch((err) => {
-			console.log("[create_rich_menu_for_all] error" + err);
-		});
-	}
 
 	render() {
 		const placeholder = {
 			text: "複製貼上 Bot Designer 產生的程式"
 		};
 		const handleJSONChange = this.handleJSONChange;
-		const handleClick = this.handleClick;
 		return(
 			<div>
 				<Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>編輯圖文選單</Header>
@@ -95,7 +76,6 @@ export default class EditRichMenu extends Component {
           />
 					<p>3. 選擇圖文選單的背景圖片（必須為 2500x1686 or 2500x843）</p>
 					<FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
-					<Button onClick={handleClick}></Button>
 				</Segment>
 			</div>
 			
