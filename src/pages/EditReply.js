@@ -1,5 +1,5 @@
 import React, { Component}  from 'react';
-import { Image, Header, Button, Segment, Dropdown, List, Label, Divider } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Dropdown, Label, Divider } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
@@ -35,6 +35,12 @@ export default class EditReply extends Component {
 
   handleJSONChange = (e) => {
     //console.log("event" + JSON.stringify(e));
+
+    //auto replace baseURL for imagemap
+    if(this.state.type === 'imagemap' && this.state.fileBaseUrl !== "") {
+      e.jsObject.baseUrl = this.state.fileBaseUrl;
+    }
+
     this.props.contentCallback(this.props.id, e);
   }
 
@@ -51,22 +57,32 @@ export default class EditReply extends Component {
       if(this.state.type === 'image') {
         //upload image, get url and preview url
         const post_url = BASE_URL + 'image_upload';
-        const configs = {
-          headers:{
-            'content-type': 'application/json'
-          }
-        }
         const data = {
           name: file.name,
           binary: file.base64
         }
-        axios.post(post_url, data, configs)
+        axios.post(post_url, data, {
+          headers:{
+            'content-type': 'application/json'
+          }
+        })
         .then(response => {
           console.log("[sendUpdateRequest] success");
           alert("檔案上傳成功！");
           this.setState({ 
             fileUrl: response.data.fileUrl,
             filePreviewUrl: response.data.filePreviewUrl
+          }, () => {
+            const imageMsgObj = {
+              "jsObject": {
+                "type": "image",
+                "originalContentUrl": this.state.fileUrl,
+                "previewImageUrl": this.state.filePreviewUrl,
+                "animated": false
+              },
+              "error": false
+            }
+            this.props.contentCallback(this.props.id, imageMsgObj);
           });
         })
         .catch(error => {
@@ -121,7 +137,7 @@ export default class EditReply extends Component {
     const handleJSONChange = this.handleJSONChange;
     const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : this.getTemplateFromType(this.state.type);
 
-    if(this.state.type === "text" || this.state.type === "sticker" || this.state.type === "location" || this.state.type === "confirm") {
+    if(this.state.type === "text" || this.state.type === "location" || this.state.type === "confirm") {
       //Messages don't need image or file upload
       return (
         <div>
@@ -131,39 +147,33 @@ export default class EditReply extends Component {
             id          = { this.props.id }
             placeholder = { placeholder }
             locale      = { locale }
-            height      = '100px'
+            height      = '110px'
+            onChange    = { handleJSONChange }
+          />
+        </div>
+      )
+    } else if(this.state.type === "sticker") {
+      return (
+        <div>
+          <a href="https://devdocs.line.me/files/sticker_list.pdf" rel="noopener noreferrer" target="_blank" title="可以用的貼圖列表">可以用的貼圖列表</a>
+          <p>2. 使用 Bot Designer 設計好訊息</p>
+          <p>3. 複製貼上 Bot Designer 產生的程式</p>
+          <JSONInput
+            id          = { this.props.id }
+            placeholder = { placeholder }
+            locale      = { locale }
+            height      = '130px'
             onChange    = { handleJSONChange }
           />
         </div>
       )
     } else if(this.state.type === "image") {
-      const fileUrl = this.state.fileUrl === "" ? this.props.defaultContent.hasOwnProperty("originalContentUrl") ? this.props.defaultContent.originalContentUrl : "尚未上傳完成" : this.state.fileUrl;
-      const filePreviewUrl = this.state.filePreviewUrl === "" ? this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "尚未上傳完成" : this.state.filePreviewUrl;
       const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
         <div>
           <p>2. 選擇要上傳的圖片 (必須小於1Mb)</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium' />
-          <p>3. 等待上傳後，伺服器回傳圖片網址</p>
-          <List divided selection>
-            <List.Item>
-              <Label horizontal>originalContentUrl</Label>
-              {fileUrl}
-            </List.Item>
-            <List.Item>
-              <Label horizontal>previewImageUrl</Label>
-              {filePreviewUrl}
-            </List.Item>
-          </List>
-          <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>originalContentUrl</Label> 和 <Label>previewImageUrl</Label> 取代</div>
-          <JSONInput
-            id          = { this.props.id }
-            placeholder = { placeholder }
-            locale      = { locale }
-            height      = '100px'
-            onChange    = { handleJSONChange }
-          />
         </div>
       )
     } else if(this.state.type === "video") {
@@ -175,22 +185,13 @@ export default class EditReply extends Component {
         <div></div>
       )
     } else if(this.state.type === "imagemap") {
-      const fileBaseUrl = this.state.fileBaseUrl === "" ? this.props.defaultContent.hasOwnProperty("baseUrl") ? this.props.defaultContent.baseUrl : "尚未上傳完成" : this.state.fileBaseUrl;
       const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
         <div>
           <p>2. 選擇要上傳的圖片</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium' />
-          <p>3. 等待上傳後，伺服器回傳圖片網址</p>
-          <List divided selection>
-            <List.Item>
-              <Label horizontal>baseUrl</Label>
-              {fileBaseUrl}
-            </List.Item>
-          </List>
-          <div>4. 複製貼上 Bot Designer 產生的程式，並將 <Label>baseUrl</Label> 取代</div>
-          <div>5. <Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
+          <div>3. <Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
           <JSONInput
             id          = { this.props.id }
             placeholder = { placeholder }
