@@ -88,12 +88,12 @@ export default class EditRichMenu extends Component {
 	}
 
 	render() {
-		const { file } = this.state;
 		const placeholder = {
 			text: "複製貼上 Bot Designer 產生的程式"
 		};
 		const handleJSONChange = this.handleJSONChange;
 		const renderButton = this.renderButton;
+		const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : "";
 		return(
 			<div>
 				<Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>編輯圖文選單</Header>
@@ -115,7 +115,7 @@ export default class EditRichMenu extends Component {
 					<p>3. 選擇圖文選單的背景圖片（必須為 2500x1686 or 2500x843）</p>
 					<div style={{marginLeft:'8px'}}>
 						<FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
-						<Image src={file.nase64}/>
+						<Image src={imageSrc} style={{width: '50vw'}}/>
 					</div>
 					<p>4. 儲存改動</p>
 					{renderButton()}
