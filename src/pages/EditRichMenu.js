@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import axios from 'axios';
-import { Header, Segment, Divider, Button } from 'semantic-ui-react';
+import { Header, Segment, Divider, Button, Image } from 'semantic-ui-react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
@@ -16,7 +16,8 @@ export default class EditRichMenu extends Component {
 			file: {},
 			richmenuId: "",
 			jsonEdited: false,
-			fileOk: false
+			fileOk: false,
+			isUploading: false
     };
 	}
 
@@ -27,6 +28,8 @@ export default class EditRichMenu extends Component {
 				file: file,
 				fileOk: true
 			});
+		} else {
+			alert("檔案超過 1kb");
 		}
 	}
 
@@ -39,11 +42,15 @@ export default class EditRichMenu extends Component {
 	}
 
 	createRichMenu = () => {
+		this.setState({
+			isUploading: true
+		});
 		const post_url = BASE_URL + 'create_rich_menu_for_all';
 		const data = {
 			menu: this.state.menu,
-			binary: this.state.file.base64,
-			binary_size: this.state.file.size
+			file_base64: this.state.file.base64,
+			file_size: this.state.file.size,
+			file_type: this.state.file.type
 		}
 		axios.post(post_url, data, {
 			headers:{
@@ -52,19 +59,41 @@ export default class EditRichMenu extends Component {
 		})
 		.then(response => {
 			console.log("[createRichMenu] success");
+			this.setState({
+				isUploading: false
+			});
+			alert("修改圖文選單成功！");
 		})
 		.catch(error => {
 			console.log("[createRichMenu] error" + error);
+			this.setState({
+				isUploading: false
+			});
+			alert("修改圖文選單失敗，錯誤：" + error);
 		});
 	}
 
-	render() {
+	renderButton = () => {
 		const { jsonEdited, fileOk } = this.state;
+		const createRichMenu = this.createRichMenu;
+		if(this.state.isUploading) {
+			return (
+				<Button style={{color:'white', background:'#00B300', margin:'8px'}} loading>儲存</Button>
+			)
+		} else {
+			return (
+				<Button style={{color:'white', background:'#00B300', margin:'8px'}}  disabled={!jsonEdited || !fileOk} onClick={createRichMenu}>儲存</Button>
+			)
+		}
+	}
+
+	render() {
+		const { file } = this.state;
 		const placeholder = {
 			text: "複製貼上 Bot Designer 產生的程式"
 		};
 		const handleJSONChange = this.handleJSONChange;
-		const createRichMenu = this.createRichMenu;
+		const renderButton = this.renderButton;
 		return(
 			<div>
 				<Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>編輯圖文選單</Header>
@@ -86,11 +115,10 @@ export default class EditRichMenu extends Component {
 					<p>3. 選擇圖文選單的背景圖片（必須為 2500x1686 or 2500x843）</p>
 					<div style={{marginLeft:'8px'}}>
 						<FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
+						<Image src={file.nase64}/>
 					</div>
 					<p>4. 儲存改動</p>
-					<div>
-						<Button style={{color:'white', background:'#00B300', margin:'8px'}}  disabled={!jsonEdited || !fileOk} onClick={createRichMenu}>儲存</Button>
-					</div>
+					{renderButton()}
 				</Segment>
 			</div>
 			
