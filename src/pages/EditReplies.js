@@ -17,6 +17,18 @@ export default class EditReplies extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.path !== this.state.path) {
+      console.log("props change");
+      this.setState({
+        messageArray: [],
+        hasAnyError: false
+      }, () => {
+        this.queryReplyMsg();
+      });
+    }
+  }
+
   componentDidMount() {
     this.queryReplyMsg();
   }
@@ -157,7 +169,7 @@ export default class EditReplies extends Component {
     const handleContentDelete = this.handleContentDelete;
 		return (
       <div>
-        <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>編輯回應訊息(最多5則)</Header>
+        <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>{this.props.title} (最多5則訊息)</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 或 flex simulator 使用</p>
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         <br/>

@@ -96,7 +96,7 @@ export default class EditRichMenu extends Component {
 		const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : "";
 		return(
 			<div>
-				<Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>編輯圖文選單</Header>
+				<Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>修改圖文選單</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 使用</p>
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         <br/>

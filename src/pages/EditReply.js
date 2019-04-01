@@ -191,12 +191,12 @@ export default class EditReply extends Component {
           <p>2. 選擇要上傳的圖片</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium' />
-          <div>3. <Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
+          <div>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
           <JSONInput
             id          = { this.props.id }
             placeholder = { placeholder }
             locale      = { locale }
-            height      = '100px'
+            height      = '150px'
             onChange    = { handleJSONChange }
           />
         </div>

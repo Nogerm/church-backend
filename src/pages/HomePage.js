@@ -73,17 +73,19 @@ export default class HomePage extends Component {
 
   handleItemClick = (e, { name, path }) => {
     this.setState({ 
-      activeItem: path
+      activeItem: path,
+      activeItemName: name
     })
   }
 
   renderBodyContent = () => {
-    if(this.state.activeItem === 'rich_menu') return <EditRichMenu/>
-    else return <EditReplies path={this.state.activeItem}/>
+    const { activeItem, activeItemName } = this.state
+    if(activeItem === 'rich_menu') return <EditRichMenu/>
+    else return <EditReplies path={activeItem} title={activeItemName}/>
   }
 
   renderBody = () => {
-    const { activeItem } = this.state
+    const { activeItem } = this.state;
     const hasSendRequest = this.state.hasSendRequest;
     const hasLoggedIn = this.state.hasLoggedIn;
     const renderBodyContent = this.renderBodyContent;
