@@ -163,6 +163,7 @@ export default class EditReplies extends Component {
   }
 
 	render() {
+    const path = this.props.path;
     const messageArray = this.state.messageArray;
     const renderAddMessage = this.renderAddMessage;
     const handleContentChange = this.handleContentChange;
@@ -176,7 +177,7 @@ export default class EditReplies extends Component {
         <a href="https://developers.line.biz/console/fx/" rel="noopener noreferrer" target="_blank" title="Flex simulator 線上編輯器">Flex simulator 線上編輯器</a>
         {messageArray.map(function(messageObj, index){
           return (
-            <EditReply key={messageObj._id} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
+            <EditReply key={messageObj._id} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} path={path} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
           )
         })}
         {renderAddMessage()}

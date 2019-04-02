@@ -17,6 +17,7 @@ export default class HomePage extends Component {
       activeItem: 'time_info',
       hasSendRequest: false,
       hasLoggedIn: false,
+      activeItemName: '修改聚會時間',
       userId: "",
       userName: "尚未登入",
       userImageUrl: userDefaultImg

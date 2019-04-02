@@ -34,11 +34,16 @@ export default class EditReply extends Component {
   }
 
   handleJSONChange = (e) => {
-    //console.log("event" + JSON.stringify(e));
+    console.log("event" + JSON.stringify(e));
 
     //auto replace baseURL for imagemap
     if(this.state.type === 'imagemap' && this.state.fileBaseUrl !== "") {
       e.jsObject.baseUrl = this.state.fileBaseUrl;
+    }
+
+    //auto replace hero image for flex
+    if(this.state.type === 'flex' && this.state.fileUrl !== "") {
+      e.jsObject.contents.hero.url = this.state.fileUrl;
     }
 
     this.props.contentCallback(this.props.id, e);
@@ -56,10 +61,10 @@ export default class EditReply extends Component {
       });
       if(this.state.type === 'image') {
         //upload image, get url and preview url
-        const post_url = BASE_URL + 'image_upload';
+        const post_url = BASE_URL + 'image_msg_upload';
         const data = {
-          name: file.name,
-          binary: file.base64
+          binary: file.base64,
+          folder_name: this.props.path
         }
         axios.post(post_url, data, {
           headers:{
@@ -92,21 +97,44 @@ export default class EditReply extends Component {
       } else if(this.state.type === 'imagemap') {
         //upload image, get base url
         const post_url = BASE_URL + 'imagemap_image_upload';
-        const configs = {
+        const data = {
+          binary: file.base64,
+          folder_name: this.props.path
+        }
+        axios.post(post_url, data, {
           headers: {
             'content-type': 'application/json'
           }
-        }
-        const data = {
-          binary: file.base64
-        }
-        axios.post(post_url, data, configs)
+        })
         .then(response => {
           console.log("[sendUpdateRequest] success");
           alert("檔案上傳成功！");
           this.setState({ 
             fileBaseUrl: response.data.file_base_url,
             thumbHeight: response.data.thumb_height
+          });
+        })
+        .catch(error => {
+          console.log("[sendUpdateRequest] error" + error);
+          alert("檔案上傳失敗，錯誤訊息：" + error);
+        });
+      } else if(this.state.type === 'flex') {
+        //upload image, get url
+        const post_url = BASE_URL + 'image_upload';
+        const data = {
+          binary: file.base64,
+          folder_name: this.props.path
+        }
+        axios.post(post_url, data, {
+          headers:{
+            'content-type': 'application/json'
+          }
+        })
+        .then(response => {
+          console.log("[sendUpdateRequest] success");
+          alert("檔案上傳成功！");
+          this.setState({ 
+            fileUrl: response.data.fileUrl
           });
         })
         .catch(error => {
@@ -130,6 +158,7 @@ export default class EditReply extends Component {
     else if (type === 'confirm')  return {"type":"template", "template":""}
     else if (type === 'buttons')  return {"type":"template", "template":""}
     else if (type === 'carousel') return {"type":"template", "template":""}
+    else if (type === 'flex')     return {"type": "flex", "altText": "This is a Flex Message", "contents": {"type": "bubble", "body": {"type": "box", "layout": "horizontal", "contents": [{ "type": "text", "text": "Hello," }, { "type": "text", "text": "World!" }]}}}
     else return {}
   }
 
@@ -209,6 +238,23 @@ export default class EditReply extends Component {
       return (
         <div></div>
       )
+    } else if(this.state.type === "flex") {
+      const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
+      return (
+        <div>
+          <p>2. 選擇要上傳的圖片(非必要)</p>
+          <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
+          <Image src={imageSrc} size='medium' />
+          <div>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
+          <JSONInput
+            id          = { this.props.id }
+            placeholder = { placeholder }
+            locale      = { locale }
+            height      = '250px'
+            onChange    = { handleJSONChange }
+          />
+        </div>
+      )
     }
   }
 
@@ -224,7 +270,8 @@ export default class EditReply extends Component {
       { key: 'location', text: '位置',    value: 'location' },
       { key: 'confirm',  text: '確認範本', value: 'confirm' },
       { key: 'buttons',  text: '按鍵範本', value: 'buttons' },
-      { key: 'carousel', text: '輪播範本', value: 'carousel' }
+      { key: 'carousel', text: '輪播範本', value: 'carousel' },
+      { key: 'flex', text: '自定義', value: 'flex' },
     ];
 
     return (
