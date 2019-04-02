@@ -49,8 +49,36 @@ export default class HomePage extends Component {
         this.setState({
           userId: decoded.sub || "",
           userName: decoded.name || "",
-          userImageUrl: decoded.picture || "",
-          hasLoggedIn: true
+          userImageUrl: decoded.picture || ""
+        }, () => {
+          //check user available
+          const get_admins_url = "https://nogerm-demo-test.herokuapp.com/admins";
+          const logged_in_user = this.state.userId;
+          axios.get(get_admins_url)
+          .then(response => {
+            console.log("[get admins] success" + JSON.stringify(response));
+
+            const found = response.data[0].admins.find(function(element) {
+              return element === logged_in_user;
+            });
+
+            if(found === undefined) {
+              alert("沒有使用權限");
+
+              this.setState({
+                hasSendRequest: false
+              });
+            } else {
+              alert("歡迎登入，" + this.state.userName);
+
+              this.setState({
+                hasLoggedIn: true
+              });
+            }
+          })
+          .catch(error => {
+            console.log("[get admins] error" + error);
+          });
         });
       })
       .catch(error => {
