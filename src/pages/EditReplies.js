@@ -171,10 +171,8 @@ export default class EditReplies extends Component {
 		return (
       <div>
         <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>{this.props.title} (最多5則訊息)</Header>
-        <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 或 flex simulator 使用</p>
+        <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 使用</p>
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
-        <br/>
-        <a href="https://developers.line.biz/console/fx/" rel="noopener noreferrer" target="_blank" title="Flex simulator 線上編輯器">Flex simulator 線上編輯器</a>
         {messageArray.map(function(messageObj, index){
           return (
             <EditReply key={messageObj._id} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} path={path} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
