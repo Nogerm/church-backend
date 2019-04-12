@@ -129,14 +129,15 @@ export default class HomePage extends Component {
                 <Menu.Header style={{fontSize: 24}}>圖文選單</Menu.Header>
                 <Menu.Menu>
                   <Menu.Item name='修改圖文選單'    active={activeItem === 'rich_menu'}    path='rich_menu' onClick={this.handleItemClick}/>
-                  <Menu.Item name='聚會時間'    active={activeItem === 'time_info'}    path='time_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='交通資訊'    active={activeItem === 'traffic_info'} path='traffic_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='主日信息影音' active={activeItem === 'video_info'}   path='video_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='官網/FB'    active={activeItem === 'web_info'}     path='web_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='小組聚會資訊' active={activeItem === 'group_info'}   path='group_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='週報/News'  active={activeItem === 'news_info'}     path='news_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='加入好友'    active={activeItem === 'friend_info'}  path='friend_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='今日聖言'    active={activeItem === 'article_info'} path='article_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='聚會時間'        active={activeItem === 'time_info'}    path='time_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='交通資訊'        active={activeItem === 'traffic_info'} path='traffic_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='主日信息影音'    active={activeItem === 'video_info'}   path='video_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='官網/FB'        active={activeItem === 'web_info'}     path='web_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='小組聚會資訊'    active={activeItem === 'group_info'}   path='group_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='週報/News'       active={activeItem === 'news_info'}     path='news_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='加入好友'        active={activeItem === 'friend_info'}  path='friend_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='今日聖言'        active={activeItem === 'article_info'} path='article_info' onClick={this.handleItemClick}/>
+                  <Menu.Item name='沒有關鍵字的回應' active={activeItem === 'no_keyword'} path='no_keyword' onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
               <Menu.Item>
