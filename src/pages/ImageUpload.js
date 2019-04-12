@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import axios from 'axios';
-import { Header, Segment, Label, Dropdown, Image } from 'semantic-ui-react'
+import { Header, Segment, Label, Dropdown, Image, Loader } from 'semantic-ui-react'
 import FileBase64 from 'react-file-base64';
 
 const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
@@ -15,7 +15,8 @@ export default class ImageUpload extends Component {
       fileUrl: '',
       filePreviewUrl: '',
       baseUrl: '',
-      thumbHeight: ''
+      thumbHeight: '',
+      isuploading: false
     };
   }
 
@@ -40,7 +41,8 @@ export default class ImageUpload extends Component {
       this.setState({ 
         file: file,
         fileUrl: "",
-        filePreviewUrl: ""
+        filePreviewUrl: "",
+        isuploading: true
       });
       if(this.state.type === 'single') {
         //upload image, get url and preview url
@@ -58,7 +60,8 @@ export default class ImageUpload extends Component {
           console.log("[sendUpdateRequest] success");
           alert("檔案上傳成功！");
           this.setState({ 
-            fileUrl: response.data.fileUrl
+            fileUrl: response.data.fileUrl,
+            isuploading: false
           });
         })
         .catch(error => {
@@ -82,7 +85,8 @@ export default class ImageUpload extends Component {
           alert("檔案上傳成功！");
           this.setState({ 
             fileUrl: response.data.fileUrl,
-            filePreviewUrl: response.data.filePreviewUrl
+            filePreviewUrl: response.data.filePreviewUrl,
+            isuploading: false
           });
         })
         .catch(error => {
@@ -106,7 +110,8 @@ export default class ImageUpload extends Component {
           alert("檔案上傳成功！");
           this.setState({ 
             baseUrl: response.data.file_base_url,
-            thumbHeight: response.data.thumb_height
+            thumbHeight: response.data.thumb_height,
+            isuploading: false
           });
         })
         .catch(error => {
@@ -121,20 +126,20 @@ export default class ImageUpload extends Component {
     if(this.state.type === "single") {
       return (
         <div>
-          <div><Label>fileUrl</Label>{this.state.fileUrl}</div>
+          <Label style={{marginTop: '8px', marginRight: '8px'}}>fileUrl</Label>{this.state.fileUrl}
         </div>
       )
     } else if(this.state.type === "image") {
       return (
         <div>
-          <div><Label>fileUrl</Label>{this.state.fileUrl}</div>
-          <div><Label>filePreviewUrl</Label>{this.state.filePreviewUrl}</div>
+          <div><Label style={{marginTop: '8px', marginRight: '8px'}}>fileUrl</Label>{this.state.fileUrl}</div>
+          <div><Label style={{marginTop: '8px', marginRight: '8px'}}>filePreviewUrl</Label>{this.state.filePreviewUrl}</div>
         </div>
       )
     } else if(this.state.type === "imagemap") {
       return (
         <div>
-          <div><Label>baseUrl</Label>{this.state.baseUrl}</div>
+          <Label style={{marginTop: '8px', marginRight: '8px'}}>baseUrl</Label>{this.state.baseUrl}
         </div>
       )
     }
@@ -151,14 +156,16 @@ export default class ImageUpload extends Component {
 
     return (
       <div>
-        <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
+        <Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>上傳圖片給 Bot designer 使用</p>
         <Segment raised>
           <p>1. 選擇上傳類別</p>
           <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.state.type} onChange={this.onTypeChange} style={{ width:"200px" }}></Dropdown>
           <p>2. 選擇要上傳的圖片</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
-          <Image src={imageSrc} size='medium' />
+          <Image src={imageSrc} size='medium'>
+            <Loader active={this.state.isuploading} inline />
+          </Image>
           {renderContent()}
         </Segment>
       </div>

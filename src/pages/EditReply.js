@@ -1,5 +1,5 @@
 import React, { Component}  from 'react';
-import { Image, Header, Button, Segment, Dropdown, Label, Divider } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Dropdown, Label, Divider, Loader } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
@@ -17,7 +17,8 @@ export default class EditReply extends Component {
       fileUrl: "",
       filePreviewUrl: "",
       fileBaseUrl: "",
-      thumbHeight: ""
+      thumbHeight: "",
+      isuploading: false
     };
   }
 
@@ -57,7 +58,8 @@ export default class EditReply extends Component {
       this.setState({ 
         file: file,
         fileUrl: "",
-        filePreviewUrl: ""
+        filePreviewUrl: "",
+        isuploading: true
       });
       if(this.state.type === 'image') {
         //upload image, get url and preview url
@@ -76,7 +78,8 @@ export default class EditReply extends Component {
           alert("檔案上傳成功！");
           this.setState({ 
             fileUrl: response.data.fileUrl,
-            filePreviewUrl: response.data.filePreviewUrl
+            filePreviewUrl: response.data.filePreviewUrl,
+            isuploading: false
           }, () => {
             const imageMsgObj = {
               "jsObject": {
@@ -111,7 +114,8 @@ export default class EditReply extends Component {
           alert("檔案上傳成功！");
           this.setState({ 
             fileBaseUrl: response.data.file_base_url,
-            thumbHeight: response.data.thumb_height
+            thumbHeight: response.data.thumb_height,
+            isuploading: false
           });
         })
         .catch(error => {
@@ -134,7 +138,8 @@ export default class EditReply extends Component {
           console.log("[sendUpdateRequest] success");
           alert("檔案上傳成功！");
           this.setState({ 
-            fileUrl: response.data.fileUrl
+            fileUrl: response.data.fileUrl,
+            isuploading: false
           });
         })
         .catch(error => {
@@ -202,7 +207,9 @@ export default class EditReply extends Component {
         <div>
           <p>2. 選擇要上傳的圖片 (必須小於1Mb)</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
-          <Image src={imageSrc} size='medium' />
+          <Image src={imageSrc} size='medium'>
+            <Loader active={this.state.isuploading} inline />
+          </Image>
         </div>
       )
     } else if(this.state.type === "video") {
@@ -219,7 +226,9 @@ export default class EditReply extends Component {
         <div>
           <p>2. 選擇要上傳的圖片</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
-          <Image src={imageSrc} size='medium' />
+          <Image src={imageSrc} size='medium'>
+            <Loader active={this.state.isuploading} inline />
+          </Image>
           <div>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
           <JSONInput
             id          = { this.props.id }
@@ -244,7 +253,9 @@ export default class EditReply extends Component {
         <div>
           <p>2. 選擇要上傳的圖片(非必要)</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
-          <Image src={imageSrc} size='medium' />
+          <Image src={imageSrc} size='medium'>
+            <Loader active={this.state.isuploading} inline />
+          </Image>
           <div>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
           <JSONInput
             id          = { this.props.id }
