@@ -73,26 +73,13 @@ export default class EditRichMenu extends Component {
 		});
 	}
 
-	renderButton = () => {
-		const { jsonEdited, fileOk } = this.state;
-		const createRichMenu = this.createRichMenu;
-		if(this.state.isUploading) {
-			return (
-				<Button style={{color:'white', background:'#00B300', margin:'8px'}} loading>儲存</Button>
-			)
-		} else {
-			return (
-				<Button style={{color:'white', background:'#00B300', margin:'8px'}}  disabled={!jsonEdited || !fileOk} onClick={createRichMenu}>儲存</Button>
-			)
-		}
-	}
-
 	render() {
 		const placeholder = {
 			text: "複製貼上 Bot Designer 產生的程式"
-		};
+    };
+    const { jsonEdited, fileOk } = this.state;
+    const createRichMenu = this.createRichMenu;
 		const handleJSONChange = this.handleJSONChange;
-		const renderButton = this.renderButton;
 		const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : "";
 		return(
 			<div>
@@ -118,7 +105,7 @@ export default class EditRichMenu extends Component {
 						<Image src={imageSrc} style={{width: '50vw'}}/>
 					</div>
 					<p>4. 儲存改動</p>
-					{renderButton()}
+					<Button style={{color:'white', background:'#00B300', margin:'8px'}}  disabled={!jsonEdited || !fileOk} onClick={createRichMenu} loading={this.state.isUploading}>儲存</Button>
 				</Segment>
 			</div>
 			

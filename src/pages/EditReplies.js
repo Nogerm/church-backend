@@ -13,7 +13,8 @@ export default class EditReplies extends Component {
     super(props);
     this.state = {
       messageArray: [],
-      hasAnyError: false
+      hasAnyError: false,
+      isUploading: false
     };
   }
 
@@ -119,7 +120,8 @@ export default class EditReplies extends Component {
     }
     this.setState({
       hasAnyError: hasError,
-      messageArray: msgArray
+      messageArray: msgArray,
+      isUploading: true
     }, () => {
       console.log("Check result has error: " + this.state.hasAnyError);
       console.log("query array: " + JSON.stringify(queryArray));
@@ -145,10 +147,16 @@ export default class EditReplies extends Component {
     .then(response => {
       console.log("[sendUpdateRequest] success");
       alert("訊息儲存成功！");
+      this.setState({
+        isUploading: false
+      });
     })
     .catch(error => {
       console.log("[sendUpdateRequest] error" + error);
       alert("訊息儲存失敗，錯誤訊息：" + error);
+      this.setState({
+        isUploading: false
+      });
     });
   }
 
@@ -179,7 +187,7 @@ export default class EditReplies extends Component {
           )
         })}
         {renderAddMessage()}
-        <Button floated='left' style={{color:'white', background:'#00B300'}} onClick={this.handleSaveClicked}>儲存</Button>
+        <Button floated='left' style={{color:'white', background:'#00B300'}} onClick={this.handleSaveClicked} loading={this.state.isUploading}>儲存</Button>
       </div>
 		)
 	}
