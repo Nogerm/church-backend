@@ -9,6 +9,7 @@ import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-
 import EditReplies from './EditReplies';
 import EditRichMenu from './EditRichMenu';
 import ImageUpload from './ImageUpload';
+import ManageRichMenu from './ManageRichMunu';
 
 export default class HomePage extends Component {
 
@@ -112,6 +113,7 @@ export default class HomePage extends Component {
     const { activeItem, activeItemName } = this.state
     if(activeItem === 'rich_menu') return <EditRichMenu/>
     else if(activeItem === 'image_upload') return <ImageUpload title={activeItemName}/>
+    else if(activeItem === 'manage_richmenu') return <ManageRichMenu title={activeItemName}/>
     else return <EditReplies path={activeItem} title={activeItemName}/>
   }
 
@@ -143,7 +145,8 @@ export default class HomePage extends Component {
               <Menu.Item>
                 <Menu.Header style={{fontSize: 24}}>小工具</Menu.Header>
                 <Menu.Menu>
-                  <Menu.Item name='上傳圖片'    active={activeItem === 'image_upload'}    path='image_upload' onClick={this.handleItemClick}/>
+                  <Menu.Item name='上傳圖片'        active={activeItem === 'image_upload'}    path='image_upload' onClick={this.handleItemClick}/>
+                  <Menu.Item name='管理圖文選單'    active={activeItem === 'manage_richmenu'}  path='manage_richmenu' onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
             </Menu>
