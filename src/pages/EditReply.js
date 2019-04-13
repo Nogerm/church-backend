@@ -6,8 +6,6 @@ import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
 import axios from 'axios';
 
-const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
-
 export default class EditReply extends Component {
 
   constructor(props) {

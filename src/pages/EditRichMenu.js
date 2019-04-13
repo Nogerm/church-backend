@@ -6,8 +6,6 @@ import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
 
-const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
-
 export default class EditRichMenu extends Component {
 
 	constructor(props) {
