@@ -26,7 +26,7 @@ export default class ManageRichMenu extends Component {
       this.setState({
         defaultId: response.data.richMenuId
       }, () => {
-        const get_url = BASE_URL + 'rich_menu';
+        const get_url = BASE_URL + 'rich_menu_list';
         axios.get(get_url)
         .then(response => {
           console.log("[queryRichMenuList] success");
