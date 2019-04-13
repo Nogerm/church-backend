@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/church-backend/static/media/outline-icons.701ae6ab.eot"
   },
   {
-    "revision": "bf380049c22f597ee39c",
+    "revision": "3c36f1cde23fbe443ea5",
     "url": "/church-backend/static/css/main.a0e549f9.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = [
     "url": "/church-backend/static/media/brand-icons.a1a749e8.svg"
   },
   {
-    "revision": "454f23fb518e7083cde5",
-    "url": "/church-backend/static/js/2.f3dd6175.chunk.js"
+    "revision": "a4a3a6ebec803ca0b4f1",
+    "url": "/church-backend/static/js/2.979dc6f2.chunk.js"
   },
   {
     "revision": "60a89fa1248f47a49807e81a80797f64",
@@ -40,12 +40,16 @@ self.__precacheManifest = [
     "url": "/church-backend/static/media/icons.faff9214.woff"
   },
   {
-    "revision": "cd6c777f1945164224dee082abaea03a",
-    "url": "/church-backend/static/media/outline-icons.cd6c777f.woff2"
+    "revision": "b87b9ba532ace76ae9f6edfe9f72ded2",
+    "url": "/church-backend/static/media/icons.b87b9ba5.ttf"
   },
   {
-    "revision": "bf380049c22f597ee39c",
-    "url": "/church-backend/static/js/main.2a18ca3e.chunk.js"
+    "revision": "3c36f1cde23fbe443ea5",
+    "url": "/church-backend/static/js/main.c799059d.chunk.js"
+  },
+  {
+    "revision": "cd6c777f1945164224dee082abaea03a",
+    "url": "/church-backend/static/media/outline-icons.cd6c777f.woff2"
   },
   {
     "revision": "ef60a4f6c25ef7f39f2d25a748dbecfe",
@@ -76,19 +80,15 @@ self.__precacheManifest = [
     "url": "/church-backend/static/media/brand-icons.a046592b.woff"
   },
   {
-    "revision": "b87b9ba532ace76ae9f6edfe9f72ded2",
-    "url": "/church-backend/static/media/icons.b87b9ba5.ttf"
-  },
-  {
     "revision": "c5ebe0b32dc1b5cc449a76c4204d13bb",
     "url": "/church-backend/static/media/brand-icons.c5ebe0b3.ttf"
   },
   {
-    "revision": "454f23fb518e7083cde5",
+    "revision": "a4a3a6ebec803ca0b4f1",
     "url": "/church-backend/static/css/2.9e513c2d.chunk.css"
   },
   {
-    "revision": "d04023d8a65dd5811020d20b4d2c4f86",
+    "revision": "1de99e2d55d17739d28be0eab8f86147",
     "url": "/church-backend/index.html"
   }
 ];
