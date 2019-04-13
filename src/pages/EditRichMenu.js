@@ -1,4 +1,5 @@
 import React, { Component}  from 'react';
+import packageJson from '../../package.json';
 import axios from 'axios';
 import { Header, Segment, Divider, Button, Image } from 'semantic-ui-react';
 import JSONInput from 'react-json-editor-ajrm';
@@ -45,7 +46,7 @@ export default class EditRichMenu extends Component {
 		this.setState({
 			isUploading: true
 		});
-		const post_url = BASE_URL + 'create_rich_menu_for_all';
+		const post_url = packageJson.server + '/create_rich_menu_for_all';
 		const data = {
 			menu: this.state.menu,
 			file_base64: this.state.file.base64,

@@ -1,4 +1,5 @@
 import React, { Component}  from 'react';
+import packageJson from '../../package.json';
 import queryString from 'query-string';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -36,7 +37,7 @@ export default class HomePage extends Component {
       this.setState({
         hasSendRequest: true
       });
-      const server_login_url = "https://nogerm-demo-test.herokuapp.com/login";
+      const server_login_url = packageJson.server + '/login';
       const headers = {
         'Content-Type': 'application/json'
       }
@@ -55,7 +56,7 @@ export default class HomePage extends Component {
           userImageUrl: decoded.picture || ""
         }, () => {
           //check user available
-          const get_admins_url = "https://nogerm-demo-test.herokuapp.com/admins";
+          const get_admins_url = packageJson.server + '/admins';
           const logged_in_user = this.state.userId;
           axios.get(get_admins_url)
           .then(response => {
@@ -92,9 +93,9 @@ export default class HomePage extends Component {
 
   handleLoginClicked = () => {
     const requestUrl = "https://access.line.me/oauth2/v2.1/authorize";
-    const channelId = "1554176659";
-    const redirectUri = "https://nogerm.github.io/church-backend";
-    const state = "12345";
+    const channelId = packageJson.line_login_id;
+    const redirectUri = packageJson.homepage;
+    const state = "access";
     const nonce = "54321";
     const maxAge = 30 * 60;
 

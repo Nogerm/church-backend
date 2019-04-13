@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://nogerm.github.io/church-backend",
+  "server": "https://nogerm-demo-test.herokuapp.com",
+  "line_login_id": "1554176659",
   "dependencies": {
     "axios": "^0.18.0",
     "bson": "^4.0.2",

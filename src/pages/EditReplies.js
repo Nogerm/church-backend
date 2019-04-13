@@ -1,10 +1,10 @@
 import React, { Component}  from 'react';
+import packageJson from '../../package.json';
 import axios from 'axios';
 import { ObjectID } from 'bson';
 import { Header, Button, Segment } from 'semantic-ui-react'
 import EditReply from './EditReply';
 
-const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
 const MAX_REPLY_NUM = 5;
 
 export default class EditReplies extends Component {
@@ -35,7 +35,7 @@ export default class EditReplies extends Component {
   }
 
   queryReplyMsg = () => {
-    const get_url = BASE_URL + this.props.path;
+    const get_url = packageJson.server + '/' + this.props.path;
     axios.get(get_url)
     .then(response => {
       console.log("[queryReplyMsg] success" + JSON.stringify(response));
@@ -134,7 +134,7 @@ export default class EditReplies extends Component {
   }
 
   sendUpdateRequest = (queryArray) => {
-    const post_url = BASE_URL + this.props.path;
+    const post_url = packageJson.server + '/' + this.props.path;
     const configs = {
       headers: {
         'content-type': 'application/json'

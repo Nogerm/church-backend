@@ -1,8 +1,7 @@
 import React, { Component}  from 'react';
+import packageJson from '../../package.json';
 import axios from 'axios';
 import { Header, Segment, Button, Label, Table } from 'semantic-ui-react';
-
-const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
 
 export default class ManageRichMenu extends Component {
 
@@ -19,14 +18,14 @@ export default class ManageRichMenu extends Component {
   }
 
   queryRichMenuList = () => {
-    const get_url = BASE_URL + 'default_rich_menu';
+    const get_url = packageJson.server + '/default_rich_menu';
     axios.get(get_url)
     .then(response => {
       console.log("[queryRichMenuList] success");
       this.setState({
         defaultId: response.data.richMenuId
       }, () => {
-        const get_url = BASE_URL + 'rich_menu_list';
+        const get_url = packageJson.server + '/rich_menu_list';
         axios.get(get_url)
         .then(response => {
           console.log("[queryRichMenuList] success");
@@ -45,11 +44,19 @@ export default class ManageRichMenu extends Component {
   }
 
   onDeleteClick = (id) => {
-    const get_url = BASE_URL + 'rich_menu?id=' + id;
-    axios.delete(get_url)
+    const url = packageJson.server + '/delete_rich_menu';
+    const data = {
+      id: id
+    }
+    axios.post(url, data, {
+      headers:{
+        'content-type': 'application/json'
+      }
+    })
     .then(response => {
       console.log("[onDeleteClick] success");
       alert("刪除圖文選單成功: " + id);
+      this.queryRichMenuList();
     })
     .catch(error => {
       console.log("[onDeleteClick] error" + error);

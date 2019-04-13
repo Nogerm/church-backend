@@ -1,9 +1,8 @@
 import React, { Component}  from 'react';
+import packageJson from '../../package.json';
 import axios from 'axios';
 import { Header, Segment, Label, Dropdown, Image, Loader } from 'semantic-ui-react'
 import FileBase64 from 'react-file-base64';
-
-const BASE_URL = "https://nogerm-demo-test.herokuapp.com/";
 
 export default class ImageUpload extends Component {
 
@@ -46,7 +45,7 @@ export default class ImageUpload extends Component {
       });
       if(this.state.type === 'single') {
         //upload image, get url and preview url
-        const post_url = BASE_URL + 'image_upload';
+        const post_url = packageJson.server + '/image_upload';
         const data = {
           binary: file.base64,
           folder_name: 'image_single'
@@ -70,7 +69,7 @@ export default class ImageUpload extends Component {
         });
       } else if(this.state.type === 'image') {
         //upload image, get url and preview url
-        const post_url = BASE_URL + 'image_msg_upload';
+        const post_url = packageJson.server + '/image_msg_upload';
         const data = {
           binary: file.base64,
           folder_name: 'image_message'
@@ -95,7 +94,7 @@ export default class ImageUpload extends Component {
         });
       } else if(this.state.type === 'imagemap') {
         //upload image, get base url
-        const post_url = BASE_URL + 'imagemap_image_upload';
+        const post_url = packageJson.server + '/imagemap_image_upload';
         const data = {
           binary: file.base64,
           folder_name: 'image_imagemap'
