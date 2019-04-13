@@ -239,14 +239,6 @@ export default class EditReply extends Component {
           />
         </div>
       )
-    } else if(this.state.type === "buttons") {
-      return (
-        <div></div>
-      )
-    } else if(this.state.type === "carousel") {
-      return (
-        <div></div>
-      )
     } else if(this.state.type === "flex") {
       const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
@@ -274,15 +266,12 @@ export default class EditReply extends Component {
     const msgTypeOptions = [
       { key: 'text',     text: '文字',    value: 'text' },
       { key: 'image',    text: '圖片',    value: 'image' },
+      { key: 'flex',     text: '彈性訊息', value: 'flex' },
+      { key: 'imagemap', text: '影像地圖', value: 'imagemap' },
       { key: 'video',    text: '影片',    value: 'video' },
       { key: 'audio',    text: '語音',    value: 'audio' },
       { key: 'sticker',  text: '貼圖',    value: 'sticker' },
-      { key: 'imagemap', text: '影像地圖', value: 'imagemap' },
       { key: 'location', text: '位置',    value: 'location' },
-      { key: 'confirm',  text: '確認範本', value: 'confirm' },
-      { key: 'buttons',  text: '按鍵範本', value: 'buttons' },
-      { key: 'carousel', text: '輪播範本', value: 'carousel' },
-      { key: 'flex', text: '自定義', value: 'flex' },
     ];
 
     return (
