@@ -49,9 +49,11 @@ export default class ManageRichMenu extends Component {
     axios.delete(get_url)
     .then(response => {
       console.log("[onDeleteClick] success");
+      alert("刪除圖文選單成功: " + id);
     })
     .catch(error => {
       console.log("[onDeleteClick] error" + error);
+      alert("刪除圖文選單失敗，錯誤訊息: " + error);
     });
   }
 
