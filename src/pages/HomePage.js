@@ -10,6 +10,7 @@ import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-
 import EditReplies from './EditReplies';
 import EditRichMenu from './EditRichMenu';
 import ImageUpload from './ImageUpload';
+import VideoUpload from './VideoUpload';
 import ManageRichMenu from './ManageRichMunu';
 
 export default class HomePage extends Component {
@@ -19,8 +20,8 @@ export default class HomePage extends Component {
     this.state = {
       activeItem: 'time_info',
       activeItemName: '修改聚會時間',
-      hasSendRequest: false,
-      hasLoggedIn: false,
+      hasSendRequest: true,
+      hasLoggedIn: true,
       userId: "",
       userName: "尚未登入",
       userImageUrl: userDefaultImg
@@ -114,6 +115,7 @@ export default class HomePage extends Component {
     const { activeItem, activeItemName } = this.state
     if(activeItem === 'rich_menu') return <EditRichMenu/>
     else if(activeItem === 'image_upload') return <ImageUpload title={activeItemName}/>
+    else if(activeItem === 'video_upload') return <VideoUpload title={activeItemName}/>
     else if(activeItem === 'manage_richmenu') return <ManageRichMenu title={activeItemName}/>
     else return <EditReplies path={activeItem} title={activeItemName}/>
   }
@@ -125,8 +127,8 @@ export default class HomePage extends Component {
     const renderBodyContent = this.renderBodyContent;
     if(hasSendRequest && hasLoggedIn) {
       return (
-        <Grid.Row columns={2}>
-          <Grid.Column width={3}>
+        <Grid.Row columns={2} style={{padding: '0px'}}>
+          <Grid.Column width={3} style={{background: "#f3f3f3"}}>
             <Menu fluid vertical tabular style={{fontFamily: 'Noto Sans TC', fontSize: 16}}>
               <Menu.Item>
                 <Menu.Header style={{fontSize: 24}}>圖文選單</Menu.Header>
@@ -147,13 +149,14 @@ export default class HomePage extends Component {
                 <Menu.Header style={{fontSize: 24}}>小工具</Menu.Header>
                 <Menu.Menu>
                   <Menu.Item name='上傳圖片'        active={activeItem === 'image_upload'}    path='image_upload' onClick={this.handleItemClick}/>
+                  <Menu.Item name='上傳影片'        active={activeItem === 'video_upload'}    path='video_upload' onClick={this.handleItemClick}/>
                   <Menu.Item name='管理圖文選單'    active={activeItem === 'manage_richmenu'}  path='manage_richmenu' onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
             </Menu>
           </Grid.Column>
 
-          <Grid.Column stretched width={12}>
+          <Grid.Column stretched width={12}  style={{paddingTop: '8px'}}>
             {renderBodyContent()}
           </Grid.Column>
         </Grid.Row>
