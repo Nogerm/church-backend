@@ -174,8 +174,8 @@ export default class EditReply extends Component {
       //Messages don't need image or file upload
       return (
         <div>
-          <p>2. 使用 Bot Designer 設計好訊息</p>
-          <p>3. 複製貼上 Bot Designer 產生的程式</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>2. 使用 Bot Designer 設計好訊息</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>3. 複製貼上 Bot Designer 產生的程式</p>
           <JSONInput
             id          = { this.props.id }
             placeholder = { placeholder }
@@ -189,8 +189,8 @@ export default class EditReply extends Component {
       return (
         <div>
           <a href="https://devdocs.line.me/files/sticker_list.pdf" rel="noopener noreferrer" target="_blank" title="可以用的貼圖列表">可以用的貼圖列表</a>
-          <p>2. 使用 Bot Designer 設計好訊息</p>
-          <p>3. 複製貼上 Bot Designer 產生的程式</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>2. 使用 Bot Designer 設計好訊息</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>3. 複製貼上 Bot Designer 產生的程式</p>
           <JSONInput
             id          = { this.props.id }
             placeholder = { placeholder }
@@ -204,7 +204,7 @@ export default class EditReply extends Component {
       const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
         <div>
-          <p>2. 選擇要上傳的圖片 (必須小於1Mb)</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>2. 選擇要上傳的圖片 (必須小於1Mb)</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium'>
             <Loader active={this.state.isuploading} inline />
@@ -223,12 +223,12 @@ export default class EditReply extends Component {
       const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
         <div>
-          <p>2. 選擇要上傳的圖片</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>2. 選擇要上傳的圖片</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium'>
             <Loader active={this.state.isuploading} inline />
           </Image>
-          <div>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
+          <div style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
           <JSONInput
             id          = { this.props.id }
             placeholder = { placeholder }
@@ -242,12 +242,12 @@ export default class EditReply extends Component {
       const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : "";
       return (
         <div>
-          <p>2. 選擇要上傳的圖片(非必要)</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>2. 選擇要上傳的圖片(非必要)</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium'>
             <Loader active={this.state.isuploading} inline />
           </Image>
-          <div>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
+          <div style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>3. 複製貼上 Bot Designer 產生的程式，<Label>altText</Label>輸入在不支援的裝置上要顯示的文字</div>
           <JSONInput
             id          = { this.props.id }
             placeholder = { placeholder }
@@ -275,12 +275,12 @@ export default class EditReply extends Component {
 
     return (
       <Segment raised>
-        <Header as="h3">訊息#{this.props.idx+1}
+        <Header as="h3" style={{fontFamily: 'Noto Sans TC'}}>訊息#{this.props.idx+1}
           <Button floated='right' style={{color:'white', background:'#d32f2f'}} onClick={this.handleDeleteClicked}>刪除</Button>
         </Header>
         <Divider/>
-        <p>1. 選擇要新增的訊息類別</p>
-        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.defaultContent.type} onChange={this.onTypeChange} style={{ width:"200px" }}></Dropdown>
+        <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>1. 選擇要新增的訊息類別</p>
+        <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.props.defaultContent.type} onChange={this.onTypeChange} style={{ width:"200px", fontFamily: 'Noto Sans TC' }}></Dropdown>
         {renderContent()}
       </Segment>
 		)
