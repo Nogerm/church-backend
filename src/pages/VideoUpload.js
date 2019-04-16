@@ -1,7 +1,7 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
 import axios from 'axios';
-import { Header, Segment, Label, Loader, Input } from 'semantic-ui-react'
+import { Header, Segment, Label, Loader } from 'semantic-ui-react'
 
 export default class VideoUpload extends Component {
 
