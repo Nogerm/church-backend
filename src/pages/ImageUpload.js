@@ -158,9 +158,9 @@ export default class ImageUpload extends Component {
         <Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>上傳圖片給 Bot designer 使用</p>
         <Segment raised>
-          <p>1. 選擇上傳類別</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>1. 選擇上傳類別</p>
           <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.state.type} onChange={this.onTypeChange} style={{ width:"200px" }}></Dropdown>
-          <p>2. 選擇要上傳的圖片</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>2. 選擇要上傳的圖片</p>
           <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
           <Image src={imageSrc} size='medium'>
             <Loader active={this.state.isuploading} inline />

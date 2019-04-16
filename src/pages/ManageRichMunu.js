@@ -86,16 +86,16 @@ export default class ManageRichMenu extends Component {
     const onDeleteClick = this.onDeleteClick;
     return(
       <div>
-        <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
+        <Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
         <Segment raised>
           <Table celled padded>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell singleLine>選單名稱</Table.HeaderCell>
-                <Table.HeaderCell>聊天列標題</Table.HeaderCell>
-                <Table.HeaderCell>唯一識別碼</Table.HeaderCell>
-                <Table.HeaderCell>預設為顯示</Table.HeaderCell>
-                <Table.HeaderCell>操作</Table.HeaderCell>
+                <Table.HeaderCell singleLine style={{fontFamily: 'Noto Sans TC'}}>選單名稱</Table.HeaderCell>
+                <Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}}>聊天列標題</Table.HeaderCell>
+                <Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}}>唯一識別碼</Table.HeaderCell>
+                <Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}}>預設為顯示</Table.HeaderCell>
+                <Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}}>操作</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -104,14 +104,14 @@ export default class ManageRichMenu extends Component {
                 return (
                   <Table.Row key={menu.richMenuId}>
                     <Table.Cell>
-                      <Header as='h4'>
+                      <Header as='h4' style={{fontFamily: 'Noto Sans TC'}}>
                         {menu.name}
                       </Header>
                       {renderDefaultLabel(menu.richMenuId)}
                     </Table.Cell>
-                    <Table.Cell singleLine>{menu.chatBarText}</Table.Cell>
-                    <Table.Cell singleLine>{menu.richMenuId}</Table.Cell>
-                    <Table.Cell singleLine>{booleanToString(menu.selected)}</Table.Cell>
+                    <Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{menu.chatBarText}</Table.Cell>
+                    <Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{menu.richMenuId}</Table.Cell>
+                    <Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{booleanToString(menu.selected)}</Table.Cell>
                     <Table.Cell textAlign='center'>
                       <Button style={{color:'white', background:'#d32f2f'}} onClick={() => onDeleteClick(menu.richMenuId)}>刪除</Button>
                     </Table.Cell>

@@ -83,7 +83,7 @@ export default class VideoUpload extends Component {
         <Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>上傳影片給 Bot designer 使用</p>
         <Segment raised>
-          <p>1. 選擇要上傳的影片</p>
+          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>1. 選擇要上傳的影片</p>
           <input type='file' onChange={handleFileChange} accept="video/mp4,video/x-m4v,video/*"/>
           <Loader active={this.state.isuploading} inline />
           {renderContent()}
