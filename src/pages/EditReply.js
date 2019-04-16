@@ -263,14 +263,14 @@ export default class EditReply extends Component {
 	render() {
     const renderContent = this.renderContent;
     const msgTypeOptions = [
-      { key: 'text',     text: '文字',    value: 'text' },
-      { key: 'image',    text: '圖片',    value: 'image' },
-      { key: 'flex',     text: '彈性訊息', value: 'flex' },
-      { key: 'imagemap', text: '影像地圖', value: 'imagemap' },
-      { key: 'video',    text: '影片',    value: 'video' },
-      { key: 'audio',    text: '語音',    value: 'audio' },
-      { key: 'sticker',  text: '貼圖',    value: 'sticker' },
-      { key: 'location', text: '位置',    value: 'location' },
+      { key: 'text',     text: '文字',    value: 'text',  icon: 'font' },
+      { key: 'image',    text: '圖片',    value: 'image',  icon: 'picture' },
+      { key: 'flex',     text: '彈性訊息', value: 'flex',  icon: 'external square alternate' },
+      { key: 'imagemap', text: '影像地圖', value: 'imagemap',  icon: 'block layout' },
+      { key: 'video',    text: '影片',    value: 'video',  icon: 'video' },
+      { key: 'audio',    text: '語音',    value: 'audio',  icon: 'music' },
+      { key: 'sticker',  text: '貼圖',    value: 'sticker',  icon: 'meh' },
+      { key: 'location', text: '位置',    value: 'location',  icon: 'point' },
     ];
 
     return (
