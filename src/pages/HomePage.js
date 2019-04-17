@@ -20,8 +20,8 @@ export default class HomePage extends Component {
     this.state = {
       activeItem: 'time_info',
       activeItemName: '修改聚會時間',
-      hasSendRequest: true,
-      hasLoggedIn: true,
+      hasSendRequest: false,
+      hasLoggedIn: false,
       userId: "",
       userName: "尚未登入",
       userImageUrl: userDefaultImg
@@ -48,9 +48,14 @@ export default class HomePage extends Component {
       }
       axios.post(server_login_url, data, headers)
       .then(response => {
+        //get token
         const decoded = jwt_decode(response.data.id_token);
         console.log("[login]\ndecode: " + JSON.stringify(decoded));
         console.log("[login]\nuser id: " + decoded.sub + "\nuser name: " + decoded.name + "\nuser image url: " + decoded.picture);
+
+        //config axios
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.id_token;
+
         this.setState({
           userId: decoded.sub || "",
           userName: decoded.name || "",
