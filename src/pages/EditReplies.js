@@ -12,6 +12,7 @@ export default class EditReplies extends Component {
 	constructor(props) {
     super(props);
     this.state = {
+      keywordObj: this.props.keyword || {},
       messageArray: [],
       hasAnyError: false,
       isUploading: false
@@ -35,15 +36,17 @@ export default class EditReplies extends Component {
   }
 
   queryReplyMsg = () => {
-    const get_url = packageJson.server + '/' + this.props.path;
+    const get_url = packageJson.server + '/keywords';
+    console.log();
     axios.get(get_url)
     .then(response => {
+      const keywordReplyObj = response.data.find(item => item._id === this.state.keywordObj._id);
       console.log("[queryReplyMsg] success" + JSON.stringify(response));
       let initArray = [];
-      for (var idx = 0; idx < response.data.length; idx++) {
+      for (var idx = 0; idx < keywordReplyObj.messages.length; idx++) {
         const messageObj = {
-          _id: response.data[idx]._id,
-          content: response.data[idx],
+          _id: keywordReplyObj.messages[idx]._id,
+          content: keywordReplyObj.messages[idx],
           editContent: ""
         }
         initArray.push(messageObj);
@@ -134,13 +137,16 @@ export default class EditReplies extends Component {
   }
 
   sendUpdateRequest = (queryArray) => {
-    const post_url = packageJson.server + '/' + this.props.path;
+    const post_url = packageJson.server + '/update_keyword_msgs';
     const configs = {
       headers: {
         'content-type': 'application/json'
       }
     }
     const data = {
+      _id: this.state.keywordObj._id,
+      label: this.state.keywordObj.label,
+			value: this.state.keywordObj.value,
       messages: queryArray
     }
     axios.post(post_url, data, configs)
@@ -171,19 +177,19 @@ export default class EditReplies extends Component {
   }
 
 	render() {
+    const { keywordObj, messageArray } = this.state;
     const path = this.props.path;
-    const messageArray = this.state.messageArray;
     const renderAddMessage = this.renderAddMessage;
     const handleContentChange = this.handleContentChange;
     const handleContentDelete = this.handleContentDelete;
 		return (
-      <div>
-        <Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>{this.props.title} (最多5則訊息)</Header>
+      <div style={{paddingBottom: '50px'}}>
+        <Header as="h2"  style={{fontFamily: 'Noto Sans TC'}}>{keywordObj.label} (最多5則訊息)</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 使用</p>
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         {messageArray.map(function(messageObj, index){
           return (
-            <EditReply key={messageObj._id} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} path={path} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
+            <EditReply key={index} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} path={path} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
           )
         })}
         {renderAddMessage()}

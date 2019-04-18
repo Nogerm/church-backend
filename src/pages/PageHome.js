@@ -7,7 +7,6 @@ import './App.css';
 import lineLogo from './LINE@_APP_typeA.png';
 import userDefaultImg from './user_default.png';
 import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-react';
-import EditReplies from './EditReplies';
 import EditRichMenu from './EditRichMenu';
 import ImageUpload from './ImageUpload';
 import VideoUpload from './VideoUpload';
@@ -19,8 +18,8 @@ export default class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: 'time_info',
-      activeItemName: '修改聚會時間',
+      activeItem: 'manage_keyword',
+      activeItemName: '關鍵字自動回應',
       hasSendRequest: true,
       hasLoggedIn: true,
       userId: "",
@@ -124,7 +123,6 @@ export default class HomePage extends Component {
     else if(activeItem === 'video_upload') return <VideoUpload title={activeItemName}/>
     else if(activeItem === 'manage_richmenu') return <ManageRichMenu title={activeItemName}/>
     else if(activeItem === 'manage_keyword') return <PageKeyword title={activeItemName}/>
-    else return <EditReplies path={activeItem} title={activeItemName}/>
   }
 
   renderBody = () => {
@@ -134,23 +132,15 @@ export default class HomePage extends Component {
     const renderBodyContent = this.renderBodyContent;
     if(hasSendRequest && hasLoggedIn) {
       return (
-        <Grid.Row columns={2} style={{padding: '0px'}}>
+        <Grid.Row columns={2} style={{padding: '0px', height: '90vh'}}>
           <Grid.Column width={3} style={{background: "#f3f3f3"}}>
             <Menu fluid vertical tabular style={{fontFamily: 'Noto Sans TC', fontSize: 16}}>
               <Menu.Item>
                 <Menu.Header style={{fontSize: 24}}>圖文選單</Menu.Header>
                 <Menu.Menu>
                   <Menu.Item name='修改圖文選單'    active={activeItem === 'rich_menu'}    path='rich_menu' onClick={this.handleItemClick}/>
-                  <Menu.Item name='聚會時間'        active={activeItem === 'time_info'}    path='time_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='交通資訊'        active={activeItem === 'traffic_info'} path='traffic_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='主日信息影音'    active={activeItem === 'video_info'}   path='video_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='官網/FB'        active={activeItem === 'web_info'}     path='web_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='小組聚會資訊'    active={activeItem === 'group_info'}   path='group_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='週報/News'       active={activeItem === 'news_info'}     path='news_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='加入好友'        active={activeItem === 'friend_info'}  path='friend_info' onClick={this.handleItemClick}/>
-                  <Menu.Item name='今日聖言'        active={activeItem === 'article_info'} path='article_info' onClick={this.handleItemClick}/>
                   <Menu.Item name='沒有關鍵字的回應' active={activeItem === 'no_keyword'} path='no_keyword' onClick={this.handleItemClick}/>
-                  <Menu.Item name='管理關鍵字' active={activeItem === 'manage_keyword'} path='manage_keyword' onClick={this.handleItemClick}/>
+                  <Menu.Item name='關鍵字自動回應' active={activeItem === 'manage_keyword'} path='manage_keyword' onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
               <Menu.Item>
