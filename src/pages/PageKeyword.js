@@ -49,6 +49,10 @@ export default class PageKeyword extends Component {
 		.then(response => {
 			console.log("[keyword_add] success");
 			query_all_keyword();
+			this.setState({
+				newKeywordLabel: "",
+				newKeywordValue: ""
+			});
 		})
 		.catch(error => {
 			console.log("[keyword_add] error" + error);
@@ -106,9 +110,9 @@ export default class PageKeyword extends Component {
 					<Table>
 						<Table.Header>
 								<Table.Row>
-									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='7'>關鍵字顯示名稱</Table.HeaderCell>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字顯示名稱</Table.HeaderCell>
 									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字內容</Table.HeaderCell>
-									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='3'>操作</Table.HeaderCell>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='4'>操作</Table.HeaderCell>
 								</Table.Row>
 							</Table.Header>
 
@@ -120,7 +124,7 @@ export default class PageKeyword extends Component {
 											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.value}</Table.Cell>
 											<Table.Cell textAlign='center'>
 												<Button floated='right' color='google plus' onClick={() => keyword_remove(keyword._id)}>刪除</Button>
-												<Button floated='right' color='vk' onClick={() => keyword_edit(keyword._id)}>編輯</Button>
+												<Button floated='right' color='vk' onClick={() => keyword_edit(keyword._id)}>編輯回應</Button>
 											</Table.Cell>
 										</Table.Row>
 									)
@@ -129,7 +133,7 @@ export default class PageKeyword extends Component {
 
 							<Table.Footer>
 								<Table.Row>
-        					<Table.HeaderCell colSpan='3'>
+        					<Table.HeaderCell colSpan='4'>
 										<Form onSubmit={this.keyword_add}>
 											<Form.Group>
 												<Form.Field
