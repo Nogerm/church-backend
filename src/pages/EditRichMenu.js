@@ -61,14 +61,14 @@ export default class EditRichMenu extends Component {
 			this.setState({
 				isUploading: false
 			});
-			alert("修改圖文選單成功！");
+			alert("新增圖文選單成功！");
 		})
 		.catch(error => {
 			console.log("[createRichMenu] error" + error);
 			this.setState({
 				isUploading: false
 			});
-			alert("修改圖文選單失敗，錯誤：" + error);
+			alert("新增圖文選單失敗，錯誤：" + error);
 		});
 	}
 
@@ -82,15 +82,15 @@ export default class EditRichMenu extends Component {
 		const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : "";
 		return(
 			<div>
-				<Header as="h1"  style={{fontFamily: 'Noto Sans TC'}}>修改圖文選單</Header>
+				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>新增圖文選單</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 使用</p>
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         <br/>
 				<Segment raised>
-					<Header as="h3">圖文選單</Header>
+					<Header as="h3" style={{fontFamily: 'Noto Sans TC'}}>圖文選單</Header>
 					<Divider/>
-        	<p>1. 使用 Bot designer 設計要用的圖文選單</p>
-					<p>2. 複製貼上 Bot Designer 產生的程式</p>
+        	<p style={{fontFamily: 'Noto Sans TC'}}>1. 使用 Bot designer 設計要用的圖文選單</p>
+					<p style={{fontFamily: 'Noto Sans TC'}}>2. 複製貼上 Bot Designer 產生的程式</p>
 					<JSONInput
             id          = { this.props.id }
             placeholder = { placeholder }
@@ -98,12 +98,12 @@ export default class EditRichMenu extends Component {
             height      = '300px'
             onChange    = { handleJSONChange }
           />
-					<p>3. 選擇圖文選單的背景圖片（必須為 2500x1686 or 2500x843）</p>
+					<p style={{fontFamily: 'Noto Sans TC'}}>3. 選擇圖文選單的背景圖片（必須為 2500x1686 or 2500x843）</p>
 					<div style={{marginLeft:'8px'}}>
 						<FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
 						<Image src={imageSrc} style={{width: '50vw'}}/>
 					</div>
-					<p>4. 儲存改動</p>
+					<p style={{fontFamily: 'Noto Sans TC'}}>4. 儲存改動</p>
 					<Button style={{color:'white', background:'#00B300', margin:'8px'}}  disabled={!jsonEdited || !fileOk} onClick={createRichMenu} loading={this.state.isUploading}>儲存</Button>
 				</Segment>
 			</div>
