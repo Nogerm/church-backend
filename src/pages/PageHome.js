@@ -6,12 +6,13 @@ import jwt_decode from 'jwt-decode';
 import './App.css';
 import lineLogo from './LINE@_APP_typeA.png';
 import userDefaultImg from './user_default.png';
-import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-react'
+import { Grid, Menu, Image, Header, Button, Segment, Loader } from 'semantic-ui-react';
 import EditReplies from './EditReplies';
 import EditRichMenu from './EditRichMenu';
 import ImageUpload from './ImageUpload';
 import VideoUpload from './VideoUpload';
 import ManageRichMenu from './ManageRichMunu';
+import PageKeyword from './PageKeyword';
 
 export default class HomePage extends Component {
 
@@ -20,8 +21,8 @@ export default class HomePage extends Component {
     this.state = {
       activeItem: 'time_info',
       activeItemName: '修改聚會時間',
-      hasSendRequest: false,
-      hasLoggedIn: false,
+      hasSendRequest: true,
+      hasLoggedIn: true,
       userId: "",
       userName: "尚未登入",
       userImageUrl: userDefaultImg
@@ -122,6 +123,7 @@ export default class HomePage extends Component {
     else if(activeItem === 'image_upload') return <ImageUpload title={activeItemName}/>
     else if(activeItem === 'video_upload') return <VideoUpload title={activeItemName}/>
     else if(activeItem === 'manage_richmenu') return <ManageRichMenu title={activeItemName}/>
+    else if(activeItem === 'manage_keyword') return <PageKeyword title={activeItemName}/>
     else return <EditReplies path={activeItem} title={activeItemName}/>
   }
 
@@ -148,6 +150,7 @@ export default class HomePage extends Component {
                   <Menu.Item name='加入好友'        active={activeItem === 'friend_info'}  path='friend_info' onClick={this.handleItemClick}/>
                   <Menu.Item name='今日聖言'        active={activeItem === 'article_info'} path='article_info' onClick={this.handleItemClick}/>
                   <Menu.Item name='沒有關鍵字的回應' active={activeItem === 'no_keyword'} path='no_keyword' onClick={this.handleItemClick}/>
+                  <Menu.Item name='管理關鍵字' active={activeItem === 'manage_keyword'} path='manage_keyword' onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
               <Menu.Item>
