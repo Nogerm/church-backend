@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Grid, Menu, Image, Header, Button, Segment, Loader, Table, Input, Form } from 'semantic-ui-react'
+import { Grid, Menu, Image, Header, Button, Segment, Loader, Table, Input, Form, Transition } from 'semantic-ui-react'
 import axios from 'axios';
 
 export default class PageKeyword extends Component {
@@ -11,7 +11,8 @@ export default class PageKeyword extends Component {
 			keywordsArray: [{_id: "123", label: "沒有關鍵字", value: "沒有關鍵字"}],
 			newKeywordLabel: "",
 			newKeywordValue: "",
-			isDeleting: false
+      isDeleting: false,
+      modalVisible: false
     };
 	}
 
@@ -95,18 +96,22 @@ export default class PageKeyword extends Component {
 		this.setState({
 			newKeywordValue: value
 		});
-	}
+  }
+  
+  handleVisibility = () => this.setState({ modalVisible: !this.state.modalVisible })
 
 	render() {
-		const { keywordsArray, newKeywordLabel, newKeywordValue } = this.state;
+		const { keywordsArray, newKeywordLabel, newKeywordValue, modalVisible } = this.state;
 		const keyword_remove = this.keyword_remove;
 		const keyword_edit = this.keyword_edit;
 		const handleLabelChange = this.handleLabelChange;
-		const handleValueChange = this.handleValueChange;
+    const handleValueChange = this.handleValueChange;
+    const handleVisibility = this.handleVisibility;
 		return (
 			<div>
 				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
-				<Segment raised>
+				<Transition.Group animation='fly right' duration={500}>
+        {!modalVisible && <Segment raised>
 					<Table>
 						<Table.Header>
 								<Table.Row>
@@ -124,7 +129,7 @@ export default class PageKeyword extends Component {
 											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.value}</Table.Cell>
 											<Table.Cell textAlign='center'>
 												<Button floated='right' color='google plus' onClick={() => keyword_remove(keyword._id)}>刪除</Button>
-												<Button floated='right' color='vk' onClick={() => keyword_edit(keyword._id)}>編輯回應</Button>
+												<Button floated='right' color='vk' onClick={handleVisibility}>編輯回應</Button>
 											</Table.Cell>
 										</Table.Row>
 									)
@@ -167,6 +172,16 @@ export default class PageKeyword extends Component {
 							</Table.Footer>
 					</Table>
 				</Segment>
+        }
+        </Transition.Group>
+
+				<Transition.Group animation='fly left' duration={500}>
+          {modalVisible && <Segment raised>
+            <Button floated='right' color='vk' onClick={handleVisibility}>X</Button>
+            </Segment>
+          }
+				</Transition.Group>
+
 			</div>
 		)
 	}
