@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Grid, Menu, Image, Header, Button, Segment, Loader, Table, Input } from 'semantic-ui-react'
+import { Grid, Menu, Image, Header, Button, Segment, Loader, Table, Input, Form } from 'semantic-ui-react'
 import axios from 'axios';
 
 export default class PageKeyword extends Component {
@@ -8,7 +8,10 @@ export default class PageKeyword extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-      keywordsArray: [{_id: "123", label: "沒有關鍵字", value: "沒有關鍵字"}]
+			keywordsArray: [{_id: "123", label: "沒有關鍵字", value: "沒有關鍵字"}],
+			newKeywordLabel: "",
+			newKeywordValue: "",
+			isDeleting: false
     };
 	}
 
@@ -31,10 +34,12 @@ export default class PageKeyword extends Component {
 	}
 
 	keyword_add = () => {
+		const query_all_keyword = this.query_all_keyword;
+
 		const url = packageJson.server + '/keywords';
 		const data = {
-			label: "123",
-			value: "456"
+			label: this.state.newKeywordLabel,
+			value: this.state.newKeywordValue
 		}
 		axios.post(url, data, {
 			headers:{
@@ -43,6 +48,7 @@ export default class PageKeyword extends Component {
 		})
 		.then(response => {
 			console.log("[keyword_add] success");
+			query_all_keyword();
 		})
 		.catch(error => {
 			console.log("[keyword_add] error" + error);
@@ -71,20 +77,38 @@ export default class PageKeyword extends Component {
     });
 	}
 
+	keyword_edit = (keyword_id) => {
+
+	}
+
+	handleLabelChange = (e, { value }) => {
+		this.setState({
+			newKeywordLabel: value
+		});
+	}
+
+	handleValueChange = (e, { value }) => {
+		this.setState({
+			newKeywordValue: value
+		});
+	}
+
 	render() {
-		const { keywordsArray } = this.state;
+		const { keywordsArray, newKeywordLabel, newKeywordValue } = this.state;
 		const keyword_remove = this.keyword_remove;
+		const keyword_edit = this.keyword_edit;
+		const handleLabelChange = this.handleLabelChange;
+		const handleValueChange = this.handleValueChange;
 		return (
 			<div>
 				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
-				<Segment>
-				<Button floated='right' style={{color:'white', background:'#00B300'}} onClick={this.keyword_add}>新增</Button>
+				<Segment raised>
 					<Table>
 						<Table.Header>
 								<Table.Row>
-									<Table.HeaderCell singleLine style={{fontFamily: 'Noto Sans TC'}}>關鍵字顯示名稱</Table.HeaderCell>
-									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}}>關鍵字訊息</Table.HeaderCell>
-									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}}>操作</Table.HeaderCell>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='7'>關鍵字顯示名稱</Table.HeaderCell>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字內容</Table.HeaderCell>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='3'>操作</Table.HeaderCell>
 								</Table.Row>
 							</Table.Header>
 
@@ -95,7 +119,8 @@ export default class PageKeyword extends Component {
 											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.label}</Table.Cell>
 											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.value}</Table.Cell>
 											<Table.Cell textAlign='center'>
-												<Button floated='right' style={{color:'white', background:'#d32f2f'}} onClick={() => keyword_remove(keyword._id)}>刪除</Button>
+												<Button floated='right' color='google plus' onClick={() => keyword_remove(keyword._id)}>刪除</Button>
+												<Button floated='right' color='vk' onClick={() => keyword_edit(keyword._id)}>編輯</Button>
 											</Table.Cell>
 										</Table.Row>
 									)
@@ -105,9 +130,34 @@ export default class PageKeyword extends Component {
 							<Table.Footer>
 								<Table.Row>
         					<Table.HeaderCell colSpan='3'>
-										<Input placeholder='Search...' />
-										<Input placeholder='Search...' />
-										<Button floated='right' style={{color:'white', background:'#00B300'}} onClick={this.keyword_add}>新增</Button>
+										<Form onSubmit={this.keyword_add}>
+											<Form.Group>
+												<Form.Field
+													control={Input}
+													label='關鍵字顯示名稱'
+													placeholder='關鍵字顯示名稱'
+													value={newKeywordLabel}
+													onChange={handleLabelChange}
+													width='7'
+												/>
+												<Form.Field
+													control={Input}
+													label='關鍵字內容'
+													placeholder='關鍵字內容'
+													value={newKeywordValue}
+													onChange={handleValueChange}
+													width='7'
+												/>
+												<Form.Field
+													control={Button}
+													content='新增'
+													label='儲存新的關鍵字'
+													style={{color:'white', background:'#00B300'}}
+													width='2'
+													floated='right'
+												/>
+											</Form.Group>
+										</Form>
 									</Table.HeaderCell>
 								</Table.Row>
 							</Table.Footer>
