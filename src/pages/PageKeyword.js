@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Header, Button, Segment, Table, Input, Form, Transition } from 'semantic-ui-react'
+import { Header, Button, Segment, Table, Input, Form, Transition, Loader } from 'semantic-ui-react'
 import axios from 'axios';
 import EditReplies from './EditReplies';
 
@@ -9,12 +9,13 @@ export default class PageKeyword extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-			keywordsArray: [{_id: "123", label: "沒有關鍵字", value: "沒有關鍵字"}],
+			keywordsArray: [],
 			newKeywordLabel: "",
 			newKeywordValue: "",
       isDeleting: false,
 			modalVisible: false,
-			selectedKeyword: {}
+			selectedKeyword: {},
+			isLoading: false
     };
 	}
 
@@ -23,12 +24,16 @@ export default class PageKeyword extends Component {
 	}
 	
 	query_all_keyword = () => {
+		this.setState({
+			isLoading: true
+		});
 		const url = packageJson.server + '/keywords';
 		axios.get(url)
 		.then(response => {
 			console.log("[query_all_keyword] success" + JSON.stringify(response.data));
 			this.setState({
-				keywordsArray: response.data
+				keywordsArray: response.data,
+				isLoading: false
 			});
 		})
 		.catch(error => {
@@ -112,7 +117,7 @@ export default class PageKeyword extends Component {
   }
 
 	render() {
-		const { keywordsArray, newKeywordLabel, newKeywordValue, modalVisible, selectedKeyword } = this.state;
+		const { keywordsArray, newKeywordLabel, newKeywordValue, modalVisible, selectedKeyword, isLoading } = this.state;
 		const keyword_remove = this.keyword_remove;
 		const keyword_edit = this.keyword_edit;
 		const keyword_edit_close = this.keyword_edit_close;
@@ -120,7 +125,7 @@ export default class PageKeyword extends Component {
     const handleValueChange = this.handleValueChange;
 		return (
 			<div>
-				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
+				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title} {this.state.selectedKeyword.label}</Header>
 				<Transition.Group animation='slide right' duration={500}>
 					{!modalVisible && <Segment raised>
 						<Table>
@@ -133,6 +138,12 @@ export default class PageKeyword extends Component {
 								</Table.Header>
 
 								<Table.Body>
+									{isLoading && <Table.Row>
+											<Table.Cell colSpan='5'>
+												<Loader active inline='centered' />
+											</Table.Cell>
+										</Table.Row>
+									}
 									{keywordsArray.map(function(keyword, index){
 										return (
 											<Table.Row key={keyword._id}>

@@ -134,7 +134,7 @@ export default class HomePage extends Component {
       return (
         <Grid.Row columns={2} style={{padding: '0px', height: '90vh'}}>
           <Grid.Column width={3} style={{background: "#f3f3f3"}}>
-            <Menu fluid vertical tabular style={{fontFamily: 'Noto Sans TC', fontSize: 16}}>
+            <Menu fluid vertical tabular style={{fontFamily: 'Noto Sans TC', fontSize: 20}} color='green'>
               <Menu.Item>
                 <Menu.Header style={{fontSize: 24}}>圖文選單</Menu.Header>
                 <Menu.Menu>

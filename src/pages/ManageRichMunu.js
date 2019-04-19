@@ -1,7 +1,7 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
 import axios from 'axios';
-import { Header, Segment, Button, Label, Table } from 'semantic-ui-react';
+import { Header, Segment, Button, Label, Table, Loader } from 'semantic-ui-react';
 
 export default class ManageRichMenu extends Component {
 
@@ -9,7 +9,8 @@ export default class ManageRichMenu extends Component {
     super(props);
     this.state = {
       richmenus: [],
-      defaultId: ""
+      defaultId: "",
+      isLoading: false
     };
   }
 
@@ -18,6 +19,9 @@ export default class ManageRichMenu extends Component {
   }
 
   queryRichMenuList = () => {
+    this.setState({
+      isLoading: true
+    });
     const get_url = packageJson.server + '/default_rich_menu';
     axios.get(get_url)
     .then(response => {
@@ -30,7 +34,8 @@ export default class ManageRichMenu extends Component {
         .then(response => {
           console.log("[queryRichMenuList] success");
           this.setState({
-            richmenus: response.data.richmenus
+            richmenus: response.data.richmenus,
+            isLoading: false
           });
         })
         .catch(error => {
@@ -80,6 +85,7 @@ export default class ManageRichMenu extends Component {
   }
 
   render() {
+    const { isLoading } = this.state;
     const menusArray = this.state.richmenus;
     const renderDefaultLabel = this.renderDefaultLabel;
     const booleanToString = this.booleanToString;
@@ -100,6 +106,12 @@ export default class ManageRichMenu extends Component {
             </Table.Header>
 
             <Table.Body>
+              {isLoading && <Table.Row>
+                  <Table.Cell colSpan='5'>
+                    <Loader active inline='centered' />
+                  </Table.Cell>
+                </Table.Row>
+              }
               {menusArray.map(function(menu, index){
                 return (
                   <Table.Row key={menu.richMenuId}>
