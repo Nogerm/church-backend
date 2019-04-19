@@ -131,8 +131,8 @@ export default class PageKeyword extends Component {
 						<Table>
 							<Table.Header>
 									<Table.Row>
-										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字顯示名稱</Table.HeaderCell>
-										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字內容</Table.HeaderCell>
+										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>標題</Table.HeaderCell>
+										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字</Table.HeaderCell>
 										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='4'>操作</Table.HeaderCell>
 									</Table.Row>
 								</Table.Header>
@@ -165,16 +165,16 @@ export default class PageKeyword extends Component {
 												<Form.Group>
 													<Form.Field
 														control={Input}
-														label='關鍵字顯示名稱'
-														placeholder='關鍵字顯示名稱'
+														label='標題'
+														placeholder='標題'
 														value={newKeywordLabel}
 														onChange={handleLabelChange}
 														width='7'
 													/>
 													<Form.Field
 														control={Input}
-														label='關鍵字內容'
-														placeholder='關鍵字內容'
+														label='關鍵字'
+														placeholder='關鍵字'
 														value={newKeywordValue}
 														onChange={handleValueChange}
 														width='7'
