@@ -8,6 +8,7 @@ export default class VideoUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      type: 'video',
       file: {},
       fileUrl: '',
       isUploading: false
@@ -86,7 +87,7 @@ export default class VideoUpload extends Component {
         <Segment raised>
           <Segment.Group>
             <Segment>
-              <Popup trigger={<Button icon='video' value='video' style={{background: this.state.type === 'imagemap' ? 'lightgray' : 'white'}} />} content='影片' inverted/>
+              <Popup trigger={<Button icon='video' value='video' style={{background: this.state.type === 'video' ? 'lightgray' : 'white'}} />} content='影片' inverted/>
             </Segment>
             <Segment placeholder>
               <input type='file' onChange={handleFileChange} accept="video/mp4,video/x-m4v,video/*"/>
