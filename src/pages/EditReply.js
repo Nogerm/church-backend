@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Image, Header, Button, Segment, Loader, Icon, Popup } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Loader, Popup } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
@@ -110,11 +110,7 @@ export default class EditReply extends Component {
         //no image file
         return (
           <Segment placeholder>
-            <Header icon>
-              <Icon name='picture' />
-              未選擇圖片
-            </Header>
-            <FileBase64 multiple={ false } onDone={handleFileChange} />
+            <FileBase64 multiple={ false } onDone={handleFileChange}  style={{margin: 'auto'}}/>
           </Segment>
         )
       } else {

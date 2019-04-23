@@ -122,10 +122,11 @@ export default class PageKeyword extends Component {
 		const keyword_edit = this.keyword_edit;
 		const keyword_edit_close = this.keyword_edit_close;
 		const handleLabelChange = this.handleLabelChange;
-    const handleValueChange = this.handleValueChange;
+		const handleValueChange = this.handleValueChange;
+		const page_title = this.props.title + (selectedKeyword.label === undefined ? '' : (' > ' + selectedKeyword.label));
 		return (
 			<div>
-				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title} {this.state.selectedKeyword.label}</Header>
+				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{page_title}</Header>
 				<Transition.Group animation='slide right' duration={500}>
 					{!modalVisible && <Segment raised>
 						<Table>
@@ -200,7 +201,7 @@ export default class PageKeyword extends Component {
 
 				<Transition.Group animation='slide left' duration={500}>
           {modalVisible && <Segment raised>
-            <Button floated='right' color='google plus' onClick={keyword_edit_close}>X</Button>
+            <Button floated='right' color='google plus' onClick={keyword_edit_close}>回上一層</Button>
 						<EditReplies keyword={selectedKeyword}/>
             </Segment>
           }

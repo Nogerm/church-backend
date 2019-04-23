@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Header, Segment, Loader } from 'semantic-ui-react'
+import { Header, Segment } from 'semantic-ui-react'
 import axios from 'axios';
 import EditReplies from './EditReplies';
 
@@ -37,7 +37,6 @@ export default class PageNoKeyword extends Component {
 	}
 
 	render() {
-		const { messageArray, isLoading } = this.state;
 		return (
 			<div>
 				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>

@@ -194,7 +194,6 @@ export default class EditReplies extends Component {
 
 	render() {
     const { keywordObj, messageArray } = this.state;
-    const path = this.props.path;
     const renderAddMessage = this.renderAddMessage;
     const handleContentChange = this.handleContentChange;
     const handleContentDelete = this.handleContentDelete;
