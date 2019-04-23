@@ -19,29 +19,20 @@ export default class EditReplies extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.path !== this.state.path) {
-      console.log("props change");
-      this.setState({
-        messageArray: [],
-        hasAnyError: false
-      }, () => {
-        this.queryReplyMsg();
-      });
+  componentDidMount() {
+    if(this.state.keywordObj.hasOwnProperty("_id")) {
+      this.queryKeywordReplyMsg();
+    } else {
+      this.queryNoKeywordReplyMsg();
     }
   }
 
-  componentDidMount() {
-    this.queryReplyMsg();
-  }
-
-  queryReplyMsg = () => {
+  queryKeywordReplyMsg = () => {
     const get_url = packageJson.server + '/keywords';
-    console.log();
     axios.get(get_url)
     .then(response => {
       const keywordReplyObj = response.data.find(item => item._id === this.state.keywordObj._id);
-      console.log("[queryReplyMsg] success" + JSON.stringify(response));
+      console.log("[queryKeywordReplyMsg] success" + JSON.stringify(response));
       let initArray = [];
       for (var idx = 0; idx < keywordReplyObj.messages.length; idx++) {
         const messageObj = {
@@ -56,10 +47,35 @@ export default class EditReplies extends Component {
       });
     })
     .catch(error => {
-      console.log("[queryReplyMsg] error" + error);
+      console.log("[queryKeywordReplyMsg] error" + error);
     });
   }
   
+  queryNoKeywordReplyMsg = () => {
+    const get_url = packageJson.server + '/no_keyword';
+    console.log();
+    axios.get(get_url)
+    .then(response => {
+      const noKeywordReplyObj = response.data;
+      console.log("[queryNoKeywordReplyMsg] success" + JSON.stringify(response.data));
+      let initArray = [];
+      for (var idx = 0; idx < noKeywordReplyObj.length; idx++) {
+        const messageObj = {
+          _id: noKeywordReplyObj[idx]._id,
+          content: noKeywordReplyObj[idx],
+          editContent: ""
+        }
+        initArray.push(messageObj);
+      }
+      this.setState({
+        messageArray: initArray
+      });
+    })
+    .catch(error => {
+      console.log("[queryNoKeywordReplyMsg] error" + error);
+    });
+  }
+
   addReplyMsg = () => {
     if(this.state.messageArray.length < MAX_REPLY_NUM) {
       const newMessage = {
@@ -189,7 +205,7 @@ export default class EditReplies extends Component {
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         {messageArray.map(function(messageObj, index){
           return (
-            <EditReply key={index} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} path={path} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
+            <EditReply key={index} id={messageObj._id} idx={index} type={messageObj.content.type} defaultContent={messageArray[index].content} contentCallback={handleContentChange} deleteCallback={handleContentDelete}/>
           )
         })}
         {renderAddMessage()}

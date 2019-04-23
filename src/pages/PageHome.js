@@ -12,6 +12,7 @@ import ImageUpload from './ImageUpload';
 import VideoUpload from './VideoUpload';
 import ManageRichMenu from './ManageRichMunu';
 import PageKeyword from './PageKeyword';
+import PageNoKeyword from './PageNoKeyword';
 import Analytics from './Analytics';
 
 export default class HomePage extends Component {
@@ -110,9 +111,9 @@ export default class HomePage extends Component {
     window.location.href = loginUrl;
   }
 
-  handleItemClick = (e, { name, path }) => {
+  handleItemClick = (e, { name, value }) => {
     this.setState({ 
-      activeItem: path,
+      activeItem: value,
       activeItemName: name
     })
   }
@@ -124,6 +125,7 @@ export default class HomePage extends Component {
     else if(activeItem === 'video_upload') return <VideoUpload title={activeItemName}/>
     else if(activeItem === 'manage_richmenu') return <ManageRichMenu title={activeItemName}/>
     else if(activeItem === 'manage_keyword') return <PageKeyword title={activeItemName}/>
+    else if(activeItem === 'manage_no_keyword') return <PageNoKeyword title={activeItemName}/>
     else if(activeItem === 'analytics') return <Analytics title={activeItemName}/>
   }
 
@@ -140,18 +142,18 @@ export default class HomePage extends Component {
               <Menu.Item>
                 <Menu.Header style={{fontSize: 24}}>圖文選單</Menu.Header>
                 <Menu.Menu>
-                  <Menu.Item name='新增圖文選單'    active={activeItem === 'rich_menu'}    path='rich_menu' onClick={this.handleItemClick}/>
-                  <Menu.Item name='管理圖文選單'    active={activeItem === 'manage_richmenu'}  path='manage_richmenu' onClick={this.handleItemClick}/>
-                  <Menu.Item name='關鍵字自動回應' active={activeItem === 'manage_keyword'} path='manage_keyword' onClick={this.handleItemClick}/>
-                  <Menu.Item name='沒有關鍵字的回應' active={activeItem === 'no_keyword'} path='no_keyword' onClick={this.handleItemClick}/>
+                  <Menu.Item name='新增圖文選單'    active={activeItem === 'rich_menu'}        value='rich_menu' onClick={this.handleItemClick}/>
+                  <Menu.Item name='管理圖文選單'    active={activeItem === 'manage_richmenu'}  value='manage_richmenu' onClick={this.handleItemClick}/>
+                  <Menu.Item name='關鍵字自動回應'  active={activeItem === 'manage_keyword'}   value='manage_keyword' onClick={this.handleItemClick}/>
+                  <Menu.Item name='沒有關鍵字的回應' active={activeItem === 'manage_no_keyword'} value='manage_no_keyword' onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
               <Menu.Item>
                 <Menu.Header style={{fontSize: 24}}>小工具</Menu.Header>
                 <Menu.Menu>
-                  <Menu.Item name='上傳圖片'        active={activeItem === 'image_upload'}    path='image_upload' onClick={this.handleItemClick}/>
-                  <Menu.Item name='上傳影片'        active={activeItem === 'video_upload'}    path='video_upload' onClick={this.handleItemClick}/>
-                  <Menu.Item name='流量分析'        active={activeItem === 'analytics'}       path='analytics'    onClick={this.handleItemClick}/>
+                  <Menu.Item name='上傳圖片'        active={activeItem === 'image_upload'}    value='image_upload' onClick={this.handleItemClick}/>
+                  <Menu.Item name='上傳影片'        active={activeItem === 'video_upload'}    value='video_upload' onClick={this.handleItemClick}/>
+                  <Menu.Item name='流量分析'        active={activeItem === 'analytics'}       value='analytics'    onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
             </Menu>

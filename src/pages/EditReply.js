@@ -54,7 +54,7 @@ export default class EditReply extends Component {
         const post_url = packageJson.server + '/image_msg_upload';
         const data = {
           binary: file.base64,
-          folder_name: this.props.path
+          folder_name: 'image_message'
         }
         axios.post(post_url, data, {
           headers:{
