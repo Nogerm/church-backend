@@ -12,6 +12,7 @@ import ImageUpload from './ImageUpload';
 import VideoUpload from './VideoUpload';
 import ManageRichMenu from './ManageRichMunu';
 import PageKeyword from './PageKeyword';
+import Analytics from './Analytics';
 
 export default class HomePage extends Component {
 
@@ -123,6 +124,7 @@ export default class HomePage extends Component {
     else if(activeItem === 'video_upload') return <VideoUpload title={activeItemName}/>
     else if(activeItem === 'manage_richmenu') return <ManageRichMenu title={activeItemName}/>
     else if(activeItem === 'manage_keyword') return <PageKeyword title={activeItemName}/>
+    else if(activeItem === 'analytics') return <Analytics title={activeItemName}/>
   }
 
   renderBody = () => {
@@ -149,7 +151,7 @@ export default class HomePage extends Component {
                 <Menu.Menu>
                   <Menu.Item name='上傳圖片'        active={activeItem === 'image_upload'}    path='image_upload' onClick={this.handleItemClick}/>
                   <Menu.Item name='上傳影片'        active={activeItem === 'video_upload'}    path='video_upload' onClick={this.handleItemClick}/>
-                  
+                  <Menu.Item name='流量分析'        active={activeItem === 'analytics'}       path='analytics'    onClick={this.handleItemClick}/>
                 </Menu.Menu>
               </Menu.Item>
             </Menu>
