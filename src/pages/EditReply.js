@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Image, Header, Button, Segment, Loader, Icon } from 'semantic-ui-react'
+import { Image, Header, Button, Segment, Loader, Icon, Popup } from 'semantic-ui-react'
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import FileBase64 from 'react-file-base64';
@@ -49,7 +49,7 @@ export default class EditReply extends Component {
         filePreviewUrl: "",
         isUploading: true
       });
-      if(this.state.isSimpleIamge) {
+      if(this.state.type === 'image') {
         //upload image, get url and preview url
         const post_url = packageJson.server + '/image_msg_upload';
         const data = {
@@ -97,27 +97,33 @@ export default class EditReply extends Component {
   renderContent = () => {
     const { type, isUploading } = this.state;
     const handleJSONChange = this.handleJSONChange;
-    const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : {};
+    const handleFileChange = this.handleFileChange;
+    const defaultMsg = {
+      "訊息內容":"請貼上 LINE Bot Designer 產生的訊息"
+    };
+    const placeholder = this.props.defaultContent.type === this.state.type ? this.props.defaultContent : defaultMsg;
 
     if(type === 'image') {
       const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : this.props.defaultContent.hasOwnProperty("previewImageUrl") ? this.props.defaultContent.previewImageUrl : '';
+      console.log('imgSrc'+imageSrc);
       if(imageSrc === '') {
         //no image file
         return (
           <Segment placeholder>
             <Header icon>
               <Icon name='picture' />
-              No images are listed for this customer.
+              未選擇圖片
             </Header>
-            <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
+            <FileBase64 multiple={ false } onDone={handleFileChange} />
           </Segment>
         )
       } else {
         //has image file
         return (
           <Segment placeholder>
-            {!isUploading && <Image src={imageSrc} size='medium'/>}
-            {isUploading  && <Loader/>}
+            <Image src={imageSrc} size='medium'>
+            </Image>
+            <Loader active={isUploading}/>
           </Segment>
         )
       }
@@ -143,14 +149,14 @@ export default class EditReply extends Component {
 
     return (
       <Segment>
-        <Button icon='talk'    value='text'  style={{background: this.state.type === 'text' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
-        <Button icon='picture' value='image' style={{background: this.state.type === 'image' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
-        <Button icon='external square alternate' value='flex' style={{background: this.state.type === 'flex' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
-        <Button icon='block layout' value='imagemap' style={{background: this.state.type === 'imagemap' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
-        <Button icon='video'   value='video' style={{background: this.state.type === 'video' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
-        <Button icon='music'   value='audio' style={{background: this.state.type === 'audio' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
-        <Button icon='meh'     value='sticker' style={{background: this.state.type === 'sticker' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
-        <Button icon='point'   value='location' style={{background: this.state.type === 'location' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>
+        <Popup trigger={<Button icon='talk'    value='text'  style={{background: this.state.type === 'text' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='文字訊息' inverted/>
+        <Popup trigger={<Button icon='picture' value='image' style={{background: this.state.type === 'image' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='圖片訊息' inverted/>
+        <Popup trigger={<Button icon='external square alternate' value='flex' style={{background: this.state.type === 'flex' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='彈性訊息' inverted/>
+        <Popup trigger={<Button icon='block layout' value='imagemap' style={{background: this.state.type === 'imagemap' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='影像地圖' inverted/>
+        <Popup trigger={<Button icon='video'   value='video' style={{background: this.state.type === 'video' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='影片訊息' inverted/>
+        <Popup trigger={<Button icon='music'   value='audio' style={{background: this.state.type === 'audio' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='語音訊息' inverted/>
+        <Popup trigger={<Button icon='meh'     value='sticker' style={{background: this.state.type === 'sticker' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='貼圖訊息' inverted/>
+        <Popup trigger={<Button icon='point'   value='location' style={{background: this.state.type === 'location' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='位置訊息' inverted/>
       </Segment>
     )
   }
