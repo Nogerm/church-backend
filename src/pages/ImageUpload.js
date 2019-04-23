@@ -1,7 +1,7 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
 import axios from 'axios';
-import { Header, Segment, Label, Dropdown, Image, Loader } from 'semantic-ui-react'
+import { Header, Segment, Image, Loader, Popup, Button, Label } from 'semantic-ui-react'
 import FileBase64 from 'react-file-base64';
 
 export default class ImageUpload extends Component {
@@ -15,13 +15,13 @@ export default class ImageUpload extends Component {
       filePreviewUrl: '',
       baseUrl: '',
       thumbHeight: '',
-      isuploading: false
+      isUploading: false
     };
   }
 
-  onTypeChange = (e, { value }) => {
+  onTypeChange = (event, data) => {
     this.setState({
-      type: value,
+      type: data.value,
       file: {},
       fileUrl: '',
       filePreviewUrl: '',
@@ -41,7 +41,7 @@ export default class ImageUpload extends Component {
         file: file,
         fileUrl: "",
         filePreviewUrl: "",
-        isuploading: true
+        isUploading: true
       });
       if(this.state.type === 'single') {
         //upload image, get url and preview url
@@ -60,7 +60,7 @@ export default class ImageUpload extends Component {
           alert("檔案上傳成功！");
           this.setState({ 
             fileUrl: response.data.fileUrl,
-            isuploading: false
+            isUploading: false
           });
         })
         .catch(error => {
@@ -85,7 +85,7 @@ export default class ImageUpload extends Component {
           this.setState({ 
             fileUrl: response.data.fileUrl,
             filePreviewUrl: response.data.filePreviewUrl,
-            isuploading: false
+            isUploading: false
           });
         })
         .catch(error => {
@@ -110,7 +110,7 @@ export default class ImageUpload extends Component {
           this.setState({ 
             baseUrl: response.data.file_base_url,
             thumbHeight: response.data.thumb_height,
-            isuploading: false
+            isUploading: false
           });
         })
         .catch(error => {
@@ -121,21 +121,23 @@ export default class ImageUpload extends Component {
     }
   }
 
-  renderContent = () => {
-    if(this.state.type === "single") {
+  renderResult = () => {
+    const { type } = this.state;
+
+    if(type === 'single') {
       return (
         <div>
           <Label style={{marginTop: '8px', marginRight: '8px'}}>fileUrl</Label>{this.state.fileUrl}
         </div>
       )
-    } else if(this.state.type === "image") {
+    } else if (type === 'image') {
       return (
         <div>
           <div><Label style={{marginTop: '8px', marginRight: '8px'}}>fileUrl</Label>{this.state.fileUrl}</div>
           <div><Label style={{marginTop: '8px', marginRight: '8px'}}>filePreviewUrl</Label>{this.state.filePreviewUrl}</div>
         </div>
       )
-    } else if(this.state.type === "imagemap") {
+    } else if (type === 'imagemap') {
       return (
         <div>
           <Label style={{marginTop: '8px', marginRight: '8px'}}>baseUrl</Label>{this.state.baseUrl}
@@ -144,28 +146,57 @@ export default class ImageUpload extends Component {
     }
   }
 
-  render() {
+  renderContent = () => {
     const imageSrc = this.state.file.hasOwnProperty("base64") ? this.state.file.base64 : "";
+    const { isUploading } = this.state;
+    const handleFileChange = this.handleFileChange;
+
+    if(imageSrc === '') {
+      //no image file
+      return (
+        <Segment placeholder>
+          <FileBase64 multiple={ false } onDone={handleFileChange}  style={{margin: 'auto'}}/>
+        </Segment>
+      )
+    } else {
+      //has image file
+      return (
+        <Segment placeholder>
+          <Image src={imageSrc} size='medium'>
+          </Image>
+          <Loader active={isUploading}/>
+        </Segment>
+      )
+    }
+  }
+
+  renderMenu = () => {
+    const onTypeChange = this.onTypeChange;
+
+    return (
+      <Segment>
+        <Popup trigger={<Button icon='image'    value='single'  style={{background: this.state.type === 'single' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='單張圖片' inverted/>
+        <Popup trigger={<Button icon='images'   value='image' style={{background: this.state.type === 'image' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='圖片訊息' inverted/>
+        <Popup trigger={<Button icon='block layout' value='imagemap' style={{background: this.state.type === 'imagemap' ? 'lightgray' : 'white'}} onClick={onTypeChange}/>} content='影像地圖' inverted/>
+      </Segment>
+    )
+  }
+
+  render() {
+    const renderMenu = this.renderMenu;
     const renderContent = this.renderContent;
-    const msgTypeOptions = [
-      { key: 'single',   text: '單張圖片',    value: 'single' },
-      { key: 'image',    text: '圖片訊息',    value: 'image' },
-      { key: 'imagemap', text: '影像地圖',    value: 'imagemap' },
-    ];
+    const renderResult = this.renderResult;
 
     return (
       <div>
         <Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>上傳圖片給 Bot designer 使用</p>
         <Segment raised>
-          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>1. 選擇上傳類別</p>
-          <Dropdown placeholder='Select message type' options={msgTypeOptions} selection defaultValue={this.state.type} onChange={this.onTypeChange} style={{ width:"200px" }}></Dropdown>
-          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>2. 選擇要上傳的圖片</p>
-          <FileBase64 multiple={ false } onDone={ this.handleFileChange.bind(this) } />
-          <Image src={imageSrc} size='medium'>
-            <Loader active={this.state.isuploading} inline />
-          </Image>
-          {renderContent()}
+          <Segment.Group>
+            {renderMenu()}
+            {renderContent()}
+          </Segment.Group>
+          {renderResult()}
         </Segment>
       </div>
     )
