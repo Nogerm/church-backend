@@ -1,7 +1,7 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
 import axios from 'axios';
-import { Header, Segment, Label, Loader } from 'semantic-ui-react'
+import { Header, Segment, Label, Loader, Popup, Button } from 'semantic-ui-react'
 
 export default class VideoUpload extends Component {
 
@@ -10,7 +10,7 @@ export default class VideoUpload extends Component {
     this.state = {
       file: {},
       fileUrl: '',
-      isuploading: false
+      isUploading: false
     };
   }
 
@@ -34,7 +34,7 @@ export default class VideoUpload extends Component {
       this.setState({ 
         file: file,
         fileUrl: "",
-        isuploading: true
+        isUploading: true
       });
 
       //upload image, get url and preview url
@@ -53,14 +53,14 @@ export default class VideoUpload extends Component {
         alert("檔案上傳成功！");
         this.setState({ 
           fileUrl: response.data.fileUrl,
-          isuploading: false
+          isUploading: false
         });
       })
       .catch(error => {
         console.log("[sendUpdateRequest] error" + error);
         alert("檔案上傳失敗，錯誤訊息：" + error);
         this.setState({ 
-          isuploading: false
+          isUploading: false
         });
       });
 
@@ -75,6 +75,7 @@ export default class VideoUpload extends Component {
   }
 
   render() {
+    const { isUploading } = this.state;
     const renderContent = this.renderContent;
     const handleFileChange = this.handleFileChange;
 
@@ -83,9 +84,15 @@ export default class VideoUpload extends Component {
         <Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
         <p style={{fontFamily: 'Noto Sans TC'}}>上傳影片給 Bot designer 使用</p>
         <Segment raised>
-          <p style={{fontFamily: 'Noto Sans TC', marginTop: '8px'}}>1. 選擇要上傳的影片</p>
-          <input type='file' onChange={handleFileChange} accept="video/mp4,video/x-m4v,video/*"/>
-          <Loader active={this.state.isuploading} inline />
+          <Segment.Group>
+            <Segment>
+              <Popup trigger={<Button icon='video' value='video' style={{background: this.state.type === 'imagemap' ? 'lightgray' : 'white'}} />} content='影片' inverted/>
+            </Segment>
+            <Segment placeholder>
+              <input type='file' onChange={handleFileChange} accept="video/mp4,video/x-m4v,video/*"/>
+              <Loader active={isUploading}/>
+            </Segment>
+          </Segment.Group>
           {renderContent()}
         </Segment>
       </div>
