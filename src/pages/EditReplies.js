@@ -200,7 +200,6 @@ export default class EditReplies extends Component {
 		return (
       <div style={{paddingBottom: '50px'}}>
         <Header as="h2"  style={{fontFamily: 'Noto Sans TC'}}>{keywordObj.label} (最多5則訊息)</Header>
-        <p style={{fontFamily: 'Noto Sans TC'}}>需配合 Bot designer 使用</p>
         <a href="https://developers.line.biz/en/services/bot-designer/" rel="noopener noreferrer" target="_blank" title="Bot designer 下載連結">Bot designer 下載連結</a>
         {messageArray.map(function(messageObj, index){
           return (
