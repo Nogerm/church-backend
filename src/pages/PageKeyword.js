@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Header, Button, Segment, Table, Input, Form, Transition, Loader } from 'semantic-ui-react'
+import { Header, Button, Segment, Table, Input, Form, Loader, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 import EditReplies from './EditReplies';
 
@@ -13,7 +13,6 @@ export default class PageKeyword extends Component {
 			newKeywordLabel: "",
 			newKeywordValue: "",
       isDeleting: false,
-			modalVisible: false,
 			selectedKeyword: {},
 			isLoading: false
     };
@@ -92,14 +91,12 @@ export default class PageKeyword extends Component {
 
 	keyword_edit = (keyword) => {
 		this.setState({ 
-			modalVisible: true,
 			selectedKeyword: keyword
 		});
 	}
 
 	keyword_edit_close = () => {
-		this.setState({ 
-			modalVisible: false,
+		this.setState({
 			selectedKeyword: {}
 		});
 	}
@@ -117,7 +114,7 @@ export default class PageKeyword extends Component {
   }
 
 	render() {
-		const { keywordsArray, newKeywordLabel, newKeywordValue, modalVisible, selectedKeyword, isLoading } = this.state;
+		const { keywordsArray, newKeywordLabel, newKeywordValue, selectedKeyword, isLoading } = this.state;
 		const keyword_remove = this.keyword_remove;
 		const keyword_edit = this.keyword_edit;
 		const keyword_edit_close = this.keyword_edit_close;
@@ -127,86 +124,78 @@ export default class PageKeyword extends Component {
 		return (
 			<div>
 				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{page_title}</Header>
-				<Transition.Group animation='slide right' duration={500}>
-					{!modalVisible && <Segment raised>
-						<Table>
-							<Table.Header>
-									<Table.Row>
-										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>標題</Table.HeaderCell>
-										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字</Table.HeaderCell>
-										<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='4'>操作</Table.HeaderCell>
-									</Table.Row>
-								</Table.Header>
+				<Segment raised>
+					<Table>
+						<Table.Header>
+								<Table.Row>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>標題</Table.HeaderCell>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='6'>關鍵字</Table.HeaderCell>
+									<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} width='4'>操作</Table.HeaderCell>
+								</Table.Row>
+							</Table.Header>
 
-								<Table.Body>
-									{isLoading && <Table.Row>
-											<Table.Cell colSpan='5'>
-												<Loader active inline='centered' />
+							<Table.Body>
+								{isLoading && <Table.Row>
+										<Table.Cell colSpan='5'>
+											<Loader active inline='centered' />
+										</Table.Cell>
+									</Table.Row>
+								}
+								{keywordsArray.map(function(keyword, index){
+									return (
+										<Table.Row key={keyword._id}>
+											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.label}</Table.Cell>
+											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.value}</Table.Cell>
+											<Table.Cell textAlign='center'>
+												<Button floated='right' color='google plus' onClick={() => keyword_remove(keyword._id)}>刪除</Button>
+												<Modal trigger={<Button floated='right' color='vk' onClick={() => keyword_edit(keyword)}>編輯回應</Button>} centered={false} closeIcon dimmer={'blurring'}>
+													<Modal.Content>
+														<EditReplies keyword={selectedKeyword}/>
+													</Modal.Content>
+												</Modal>
 											</Table.Cell>
 										</Table.Row>
-									}
-									{keywordsArray.map(function(keyword, index){
-										return (
-											<Table.Row key={keyword._id}>
-												<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.label}</Table.Cell>
-												<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.value}</Table.Cell>
-												<Table.Cell textAlign='center'>
-													<Button floated='right' color='google plus' onClick={() => keyword_remove(keyword._id)}>刪除</Button>
-													<Button floated='right' color='vk' onClick={() => keyword_edit(keyword)}>編輯回應</Button>
-												</Table.Cell>
-											</Table.Row>
-										)
-									})}
-								</Table.Body>
+									)
+								})}
+							</Table.Body>
 
-								<Table.Footer>
-									<Table.Row>
-										<Table.HeaderCell colSpan='4'>
-											<Form onSubmit={this.keyword_add}>
-												<Form.Group>
-													<Form.Field
-														control={Input}
-														label='標題'
-														placeholder='標題'
-														value={newKeywordLabel}
-														onChange={handleLabelChange}
-														width='7'
-													/>
-													<Form.Field
-														control={Input}
-														label='關鍵字'
-														placeholder='關鍵字'
-														value={newKeywordValue}
-														onChange={handleValueChange}
-														width='7'
-													/>
-													<Form.Field
-														control={Button}
-														content='新增'
-														label='儲存新的關鍵字'
-														style={{color:'white', background:'#00B300'}}
-														width='2'
-														floated='right'
-														fluid
-													/>
-												</Form.Group>
-											</Form>
-										</Table.HeaderCell>
-									</Table.Row>
-								</Table.Footer>
-						</Table>
-						</Segment>
-					}
-        </Transition.Group>
-
-				<Transition.Group animation='slide left' duration={500}>
-          {modalVisible && <Segment raised>
-            <Button floated='right' color='google plus' onClick={keyword_edit_close}>回上一層</Button>
-						<EditReplies keyword={selectedKeyword}/>
-            </Segment>
-          }
-				</Transition.Group>
-
+							<Table.Footer>
+								<Table.Row>
+									<Table.HeaderCell colSpan='3'>
+										<Form onSubmit={this.keyword_add}>
+											<Form.Group>
+												<Form.Field
+													control={Input}
+													label='標題'
+													placeholder='標題'
+													value={newKeywordLabel}
+													onChange={handleLabelChange}
+													width='7'
+												/>
+												<Form.Field
+													control={Input}
+													label='關鍵字'
+													placeholder='關鍵字'
+													value={newKeywordValue}
+													onChange={handleValueChange}
+													width='7'
+												/>
+												<Form.Field
+													control={Button}
+													content='新增'
+													label='儲存新的關鍵字'
+													style={{color:'white', background:'#00B300'}}
+													width='2'
+													floated='right'
+													fluid
+												/>
+											</Form.Group>
+										</Form>
+									</Table.HeaderCell>
+								</Table.Row>
+							</Table.Footer>
+					</Table>
+				</Segment>
 			</div>
 		)
 	}
