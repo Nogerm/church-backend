@@ -120,10 +120,9 @@ export default class PageKeyword extends Component {
 		const keyword_edit_close = this.keyword_edit_close;
 		const handleLabelChange = this.handleLabelChange;
 		const handleValueChange = this.handleValueChange;
-		const page_title = this.props.title + (selectedKeyword.label === undefined ? '' : (' > ' + selectedKeyword.label));
 		return (
 			<div>
-				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{page_title}</Header>
+				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
 				<Segment raised>
 					<Table>
 						<Table.Header>
