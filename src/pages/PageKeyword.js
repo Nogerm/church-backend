@@ -148,7 +148,7 @@ export default class PageKeyword extends Component {
 											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.value}</Table.Cell>
 											<Table.Cell textAlign='center'>
 												<Button floated='right' color='google plus' onClick={() => keyword_remove(keyword._id)}>刪除</Button>
-												<Modal trigger={<Button floated='right' color='vk' onClick={() => keyword_edit(keyword)}>編輯回應</Button>} centered={false} closeIcon dimmer={'blurring'}>
+												<Modal trigger={<Button floated='right' color='vk' onClick={() => keyword_edit(keyword)}>編輯回應</Button>} centered={false} closeIcon>
 													<Modal.Content>
 														<EditReplies keyword={selectedKeyword}/>
 													</Modal.Content>
