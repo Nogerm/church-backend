@@ -1,6 +1,6 @@
 import React, { Component}  from 'react';
 import packageJson from '../../package.json';
-import { Header, Button, Segment, Table, Input, Form, Loader, Modal } from 'semantic-ui-react'
+import { Header, Button, Segment, Table, Input, Form, Loader, Modal, Confirm } from 'semantic-ui-react'
 import axios from 'axios';
 import EditReplies from './EditReplies';
 
@@ -14,7 +14,10 @@ export default class PageKeyword extends Component {
 			newKeywordValue: "",
       isDeleting: false,
 			selectedKeyword: {},
-			isLoading: false
+			isLoading: false,
+			showModal: false,
+			showConfirm: false,
+			keywordEdited: false
     };
 	}
 
@@ -90,14 +93,45 @@ export default class PageKeyword extends Component {
 	}
 
 	keyword_edit = (keyword) => {
+		keyword.isEdited = false
 		this.setState({ 
-			selectedKeyword: keyword
+			selectedKeyword: keyword,
+			showModal: true
 		});
 	}
 
 	keyword_edit_close = () => {
+		const { selectedKeyword } = this.state;
+		console.log("isEdited"+selectedKeyword.isEdited);
+		if(selectedKeyword.isEdited) {
+			//edited, show confirm
+			this.setState({
+				showConfirm: true
+			});
+		} else {
+			//not edit, close modal
+			this.setState({
+				selectedKeyword: {},
+				showModal: false
+			});
+		}
+	}
+
+	handle_keyword_edited = (isEdited, msg) => {
+		const { selectedKeyword } = this.state;
+		selectedKeyword.isEdited = isEdited
+	}
+
+	handleCancelAbort = () => {
 		this.setState({
-			selectedKeyword: {}
+			showConfirm: false
+		});
+	}
+
+	handleConfirmAbort = () => {
+		this.setState({
+			showConfirm: false,
+			showModal: false
 		});
 	}
 
@@ -111,15 +145,43 @@ export default class PageKeyword extends Component {
 		this.setState({
 			newKeywordValue: value
 		});
-  }
+	}
+
+	renderModal = (keyword) => {
+		const { showModal, selectedKeyword } = this.state;
+		const keyword_edit_close = this.keyword_edit_close;
+		const handle_keyword_edited = this.handle_keyword_edited;
+		if(showModal) {
+			return (
+				<Modal centered={false} closeOnDimmerClick={false} open={showModal}>
+					<Modal.Content>
+						<Button floated='right' color='google plus' onClick={keyword_edit_close}>X</Button>
+						<EditReplies keyword={selectedKeyword} editCallback={handle_keyword_edited}/>
+					</Modal.Content>
+				</Modal>
+			)
+		}
+	}
+	
+	renderConfirm = () => {
+		const { showConfirm } = this.state;
+		const handleCancelAbort = this.handleCancelAbort;
+		const handleConfirmAbort = this.handleConfirmAbort;
+		if(showConfirm) {
+			return (
+				<Confirm open={showConfirm} content='要捨棄未儲存的變更嗎？' cancelButton='取消' confirmButton="確定" onCancel={handleCancelAbort} onConfirm={handleConfirmAbort} />
+			)
+		}
+	}
 
 	render() {
-		const { keywordsArray, newKeywordLabel, newKeywordValue, selectedKeyword, isLoading } = this.state;
+		const { keywordsArray, newKeywordLabel, newKeywordValue, isLoading, showModal, showConfirm } = this.state;
 		const keyword_remove = this.keyword_remove;
-		const keyword_edit = this.keyword_edit;
-		const keyword_edit_close = this.keyword_edit_close;
 		const handleLabelChange = this.handleLabelChange;
 		const handleValueChange = this.handleValueChange;
+		const keyword_edit = this.keyword_edit;
+		const renderModal = this.renderModal;
+		const renderConfirm = this.renderConfirm;
 		return (
 			<div>
 				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
@@ -147,11 +209,9 @@ export default class PageKeyword extends Component {
 											<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{keyword.value}</Table.Cell>
 											<Table.Cell textAlign='center'>
 												<Button floated='right' color='google plus' onClick={() => keyword_remove(keyword._id)}>刪除</Button>
-												<Modal trigger={<Button floated='right' color='vk' onClick={() => keyword_edit(keyword)}>編輯回應</Button>} centered={false} closeIcon>
-													<Modal.Content>
-														<EditReplies keyword={selectedKeyword}/>
-													</Modal.Content>
-												</Modal>
+												<Button floated='right' color='vk' onClick={() => keyword_edit(keyword)}>編輯回應</Button>
+												{renderModal(keyword)}
+												{renderConfirm()}
 											</Table.Cell>
 										</Table.Row>
 									)

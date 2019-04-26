@@ -94,6 +94,7 @@ export default class EditReplies extends Component {
         console.log("add message: " + JSON.stringify(messageObj));
       });
     }
+    this.props.editCallback(true, 'add');
   }
 
   handleContentDelete = (id) => {
@@ -105,6 +106,7 @@ export default class EditReplies extends Component {
     }, () => {
       console.log("Delete message id: " + id);
     });
+    this.props.editCallback(true, 'delete');
   }
 
   handleContentChange = (id, jsonState) => {
@@ -116,6 +118,7 @@ export default class EditReplies extends Component {
     this.setState({
       messageArray: [...newMessageArray]
     });
+    this.props.editCallback(true, 'update');
   }
 
   handleSaveClicked = () => {

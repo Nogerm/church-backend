@@ -41,7 +41,7 @@ export default class PageNoKeyword extends Component {
 			<div>
 				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
 				<Segment raised>
-					<EditReplies />
+					<EditReplies editCallback={() => {}}/>
         </Segment>
 			</div>
 		)
