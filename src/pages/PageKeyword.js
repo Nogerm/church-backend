@@ -175,7 +175,7 @@ export default class PageKeyword extends Component {
 	}
 
 	render() {
-		const { keywordsArray, newKeywordLabel, newKeywordValue, isLoading, showModal, showConfirm } = this.state;
+		const { keywordsArray, newKeywordLabel, newKeywordValue, isLoading } = this.state;
 		const keyword_remove = this.keyword_remove;
 		const handleLabelChange = this.handleLabelChange;
 		const handleValueChange = this.handleValueChange;
