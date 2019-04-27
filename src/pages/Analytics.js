@@ -7,60 +7,66 @@ import { Header, Segment, Button, Label, Table, Loader } from 'semantic-ui-react
 export default class Analytics extends Component {
 
 	componentDidMount() {
-		// 1. Load the JavaScript client library.
-		window.gapi.load('client', {
-			callback: function() {
-				// Handle gapi.client initialization.
-				// 2. Initialize the JavaScript client library.
-				window.gapi.client
-					.init({
-						apiKey: googleConfig.apiKey,
-						discoveryDocs: googleConfig.discoveryDocs,
+		this.loadAndInitGAPI();
+	}
+
+	loadAndInitGAPI = () => {
+		const handleAnalyticsData = this.handleAnalyticsData;
+		return new Promise((resolve, reject) => {
+			let script = document.createElement('script')
+			script.type = 'text/javascript'
+			script.src = 'https://apis.google.com/js/api.js'
+			script.onload = e => {
+				window.gapi.load('client', () => {
+					console.log("Google client ready");
+
+					//set API Key
+					window.gapi.client.setApiKey(googleConfig.apiKey);
+
+					//init auth
+					window.gapi.auth2.init({
 						clientId: googleConfig.clientId,
+						discoveryDocs: googleConfig.discoveryDocs,
 						scope: googleConfig.scope
 					})
 					.then(() => {
-					// 3. Initialize and make the API request.
-					// Listen for sign-in state changes.
-          window.gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
+						console.log("Google Auth 2 inited");
 
-          // Handle the initial sign-in state.
-          this.updateSigninStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get());
+						//sign in
+						window.gapi.auth2.getAuthInstance().signIn()
+						.then((...args) => {
+							console.log("Google Auth 2 inited");
 
+							//set access_token
+							window.gapi.client.setToken({access_token: args[0].Zi.access_token});
+
+							//load analytics API
+							window.gapi.client.load('analytics', 'v3', () => {
+								console.log("Analytics API ready");
+
+								//request analytics data
+								window.gapi.client
+								.request({
+									path:
+										"https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A193440673&start-date=2019-03-26&end-date=2019-04-26&metrics=ga%3Apageviews%2Cga%3AuniquePageviews&dimensions=ga%3ApagePath%2Cga%3Adate"
+								})
+								.then((...data) => {
+									console.log("Analytics data: " +data);
+
+									handleAnalyticsData(data);
+								});
+							});
+						});
+					});
 				});
-			},
-			onerror: function() {
-				// Handle loading error.
-				alert('gapi.client failed to load!');
-			},
-			timeout: 5000, // 5 seconds.
-			ontimeout: function() {
-				// Handle timeout.
-				alert('gapi.client could not load in a timely manner!');
 			}
-		});
+			document.getElementsByTagName('head')[0].appendChild(script)
+		})
 	}
 
-	updateSigninStatus = (isSignedIn) => {
-		// When signin status changes, this function is called.
-		// If the signin status is changed to signedIn, we make an API call.
-		if (isSignedIn) {
-			this.makeApiCall();
-		}
+	handleAnalyticsData = (dataArray) => {
+		//parse data
 	}
-
-	makeApiCall = () => {
-		// Make an API call to the People API, and print the user's given name.
-		window.gapi.client.people.people.get({
-			'resourceName': 'people/me',
-			'requestMask.includeField': 'person.names'
-		}).then(function(response) {
-			console.log('Hello, ' + response.result.names[0].givenName);
-		}, function(reason) {
-			console.log('Error: ' + reason.result.error.message);
-		});
-	}
-
 
 	render() {
 		return (
