@@ -8,12 +8,20 @@ const fakeData = {"kind":"analytics#gaData","id":"https://www.googleapis.com/ana
 
 export default class Analytics extends Component {
 
+	constructor(props) {
+    super(props);
+    this.state = {
+			chartData: [],
+			duration: 28
+    };
+  }
+
 	componentDidMount() {
 		this.loadAndInitGAPI();
 	}
 
 	loadAndInitGAPI = () => {
-		const handleAnalyticsData = this.handleAnalyticsData;
+		const queryAnalyticsData = this.queryAnalyticsData;
 		return new Promise((resolve, reject) => {
 			let script = document.createElement('script')
 			script.type = 'text/javascript'
@@ -47,16 +55,7 @@ export default class Analytics extends Component {
 								console.log("Analytics API ready");
 
 								//request analytics data
-								window.gapi.client
-								.request({
-									path:
-										"https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A193440673&start-date=2019-03-26&end-date=2019-04-26&metrics=ga%3Apageviews%2Cga%3AuniquePageviews&dimensions=ga%3ApagePath%2Cga%3Adate"
-								})
-								.then((...data) => {
-									console.log("Analytics data: " +data);
-
-									handleAnalyticsData(data);
-								});
+								queryAnalyticsData();
 							});
 						});
 					});
@@ -66,7 +65,36 @@ export default class Analytics extends Component {
 		})
 	}
 
-	handleAnalyticsData = (dataArray) => {
+	queryAnalyticsData = () => {
+		const { duration } = this.state;
+		const getDateString = this.getDateString;
+		const handleAnalyticsData = this.handleAnalyticsData;
+		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
+		const dataEndDate   = new Date();
+		const queryPath     = "https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A193440673&start-date=" + getDateString(dataStartDate) + "&end-date=" + getDateString(dataEndDate) + "&metrics=ga%3Apageviews%2Cga%3AuniquePageviews&dimensions=ga%3ApagePath%2Cga%3Adate"
+		window.gapi.client
+		.request({
+			path: queryPath
+		})
+		.then((...data) => {
+			console.log("Analytics data: " +data);
+			handleAnalyticsData(data);
+		});
+	}
+
+	getDateString = (date) => {
+		return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+	}
+
+	getDataObjFromString = (dateString) => {
+		const year  = dateString.substring(0, 3);
+		const month = dateString.substring(4, 5);
+		const day   = dateString.substring(6, 7);
+
+		return (new Date(year, month, day));
+	}
+
+	handleAnalyticsData = (data) => {
 		//parse data
 	}
 
