@@ -4,15 +4,16 @@ import { Header, Segment, Button, Label, Table, Loader } from 'semantic-ui-react
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-const fakeData = {"kind":"analytics#gaData","id":"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:193440673&dimensions=ga:pagePath,ga:date&metrics=ga:pageviews,ga:uniquePageviews&start-date=2019-03-26&end-date=2019-04-26","query":{"start-date":"2019-03-26","end-date":"2019-04-26","ids":"ga:193440673","dimensions":"ga:pagePath,ga:date","metrics":["ga:pageviews","ga:uniquePageviews"],"start-index":1,"max-results":1000},"itemsPerPage":1000,"totalResults":32,"selfLink":"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:193440673&dimensions=ga:pagePath,ga:date&metrics=ga:pageviews,ga:uniquePageviews&start-date=2019-03-26&end-date=2019-04-26","profileInfo":{"profileId":"193440673","accountId":"138277882","webPropertyId":"UA-138277882-1","internalWebPropertyId":"198888686","profileName":"所有網站資料","tableId":"ga:193440673"},"containsSampledData":false,"columnHeaders":[{"name":"ga:pagePath","columnType":"DIMENSION","dataType":"STRING"},{"name":"ga:date","columnType":"DIMENSION","dataType":"STRING"},{"name":"ga:pageviews","columnType":"METRIC","dataType":"INTEGER"},{"name":"ga:uniquePageviews","columnType":"METRIC","dataType":"INTEGER"}],"totalsForAllResults":{"ga:pageviews":"178","ga:uniquePageviews":"43"},"rows":[["/homepage","20190417","34","4"],["/主日影音","20190413","7","1"],["/主日影音","20190415","7","1"],["/主日影音","20190416","6","1"],["/主日影音","20190417","2","1"],["/主日影音","20190418","2","1"],["/主日影音訊息","20190418","1","1"],["/主日影音訊息","20190419","1","1"],["/交通資訊","20190413","10","1"],["/交通資訊","20190415","12","1"],["/交通資訊","20190417","3","2"],["/交通資訊","20190418","2","1"],["/交通資訊","20190419","1","1"],["/今日聖言","20190413","2","1"],["/今日聖言","20190415","3","1"],["/今日聖言","20190418","1","1"],["/其他訊息","20190416","1","1"],["/其他訊息","20190418","6","5"],["/加入好友","20190413","2","1"],["/加入好友","20190415","9","1"],["/加入好友","20190423","2","1"],["/官網FB","20190413","7","1"],["/官網FB","20190415","12","1"],["/官網FB","20190418","1","1"],["/小組資訊","20190415","1","1"],["/後台登入","20190415","1","1"],["/後台登入","20190416","1","1"],["/聚會時間","20190413","12","1"],["/聚會時間","20190415","9","1"],["/聚會時間","20190417","16","3"],["/聚會時間","20190426","2","2"],["/週報訊鐔","20190413","2","1"]]};
 
 export default class Analytics extends Component {
 
 	constructor(props) {
     super(props);
     this.state = {
+			queryData: {},
 			chartData: [],
-			duration: 28
+			duration: 28,
+			countType: 'pageviews'
     };
   }
 
@@ -77,8 +78,12 @@ export default class Analytics extends Component {
 			path: queryPath
 		})
 		.then((...data) => {
-			console.log("Analytics data: " +data);
-			handleAnalyticsData(data);
+			console.log("Analytics data: " + JSON.stringify(data));
+			this.setState({
+				queryData: data[0].result
+			}, () => {
+				handleAnalyticsData(data[0].result, dataStartDate);
+			});
 		});
 	}
 
@@ -86,31 +91,102 @@ export default class Analytics extends Component {
 		return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
 	}
 
-	getDataObjFromString = (dateString) => {
-		const year  = dateString.substring(0, 3);
-		const month = dateString.substring(4, 5);
-		const day   = dateString.substring(6, 7);
-
-		return (new Date(year, month, day));
+	getDataIdxFromString = (dateString) => {
+		const { duration } = this.state;
+		const year      = parseInt(dateString.substring(0, 4));
+		const month     = parseInt(dateString.substring(4, 6));
+		const date      = parseInt(dateString.substring(6, 8));
+		const dateObj   = new Date(year, month, date);
+		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
+		const startDate = new Date(dataStartDate.getFullYear(), dataStartDate.getMonth() + 1, dataStartDate.getDate());
+		const diff      = (dateObj - startDate) / (1000 * 60 * 60 * 24);
+		console.log("diff: " + diff);
+		return diff;
 	}
 
 	handleAnalyticsData = (data) => {
-		//parse data
+		const { chartData, duration, countType } = this.state;
+		const createSeriesIfNeed   = this.createSeriesIfNeed;
+		const getDataIdxFromString = this.getDataIdxFromString;
+		const insertDataForSeries  = this.insertDataForSeries;
+
+		if(data.hasOwnProperty('rows')) {
+			const dataArray = data.rows;
+			console.log("data array: " + JSON.stringify(dataArray));
+			let newDataArray = [];
+
+			dataArray.map(function(data, index){
+				console.log("data: " + JSON.stringify(data));
+				const seriesName = data[0];
+				const dataDate   = data[1];
+				const dataValue  = countType === 'pageviews' ? parseInt(data[2]) : parseInt(data[3]);
+	
+				const findResult = newDataArray.findIndex((series) => series.name === seriesName);
+				if(findResult === -1) {
+					//not found, create series
+					console.log("series not found, create one");
+					let newSeries = {};
+					newSeries.name = seriesName;
+					newSeries.data = new Array(duration).fill(0);
+					newDataArray = [...newDataArray, newSeries];
+				} else {
+					console.log("series found");
+				}
+
+				const dateIndex = getDataIdxFromString(dataDate);
+				const seriesIndex = newDataArray.findIndex((series) => series.name === seriesName);
+				if(seriesIndex === -1) {
+					//series not found
+					console.log("series not found...");
+				} else {
+					newDataArray[seriesIndex].data[getDataIdxFromString(dataDate)] = dataValue;
+				}
+			});
+
+			console.log("new data array: " + JSON.stringify(newDataArray));
+			this.setState({
+				chartData: newDataArray
+			});
+		} else {
+			alert("沒有資料");
+		}
+	}
+
+	handleDurationChange = (event, data) => {
+		const queryAnalyticsData = this.queryAnalyticsData;
+		this.setState({
+			queryData: {},
+			chartData: [],
+			duration: data.value
+		}, () => {
+			queryAnalyticsData();
+		});
+	}
+
+	handleCountTypeChange = (event, data) => {
+		const { queryData, duration } = this.state;
+		const handleAnalyticsData = this.handleAnalyticsData;
+		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
+		this.setState({
+			chartData: [],
+			countType: data.value
+		}, () => {
+			handleAnalyticsData(queryData, dataStartDate);
+		});
 	}
 
 	render() {
+		const { chartData, duration, countType } = this.state; 
+		const handleDurationChange = this.handleDurationChange;
+		const handleCountTypeChange = this.handleCountTypeChange;
 		const options = {
 			chart: {
 				type: 'line'
 			},
 			title: {
-				text: 'My chart'
+				text: '流量統計'
 			},
-			series: [
-				{
-					data: [1, 2, 1, 4, 3, 6]
-				}
-			]
+			series: chartData
 		};
 
 		return (
@@ -118,6 +194,16 @@ export default class Analytics extends Component {
 				<Header as="h1" style={{fontFamily: 'Noto Sans TC'}}>{this.props.title}</Header>
 				<a href="https://analytics.google.com/analytics/web/#/report-home/a138277882w198888686p193440673" rel="noopener noreferrer" target="_blank" title="Google Analytics">Google Analytics</a>
 				<Segment raised>
+					<Button.Group>
+						<Button style={{background: countType === 'pageviews' ? '#00B300' : 'lightgray', color: countType === 'pageviews' ? 'white' : 'gray'}} value='pageviews' onClick={handleCountTypeChange} >瀏覽量</Button>
+						<Button.Or />
+						<Button style={{background: countType === 'uniquePageviews' ? '#00B300' : 'lightgray', color: countType === 'uniquePageviews' ? 'white' : 'gray'}} value='uniquePageviews' onClick={handleCountTypeChange} >不重複瀏覽量</Button>
+					</Button.Group>
+					<Button.Group>
+						<Button style={{background: duration === 1  ? '#00B300' : 'lightgray', color: duration === 1  ? 'white' : 'gray'}} value={1}  onClick={handleDurationChange} >天</Button>
+						<Button style={{background: duration === 7  ? '#00B300' : 'lightgray', color: duration === 7  ? 'white' : 'gray'}} value={7}  onClick={handleDurationChange} >週</Button>
+						<Button style={{background: duration === 28 ? '#00B300' : 'lightgray', color: duration === 28 ? 'white' : 'gray'}} value={28} onClick={handleDurationChange} >月</Button>
+					</Button.Group>
 					<HighchartsReact highcharts={Highcharts} options={options} />
 				</Segment>
 			</div>
