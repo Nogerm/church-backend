@@ -12,8 +12,11 @@ export default class Analytics extends Component {
     this.state = {
 			queryData: {},
 			chartData: [],
+			xAxis: [],
 			duration: 28,
-			countType: 'pageviews'
+			total: 0,
+			countType: 'pageviews',
+			isLoading: false
     };
   }
 
@@ -73,6 +76,9 @@ export default class Analytics extends Component {
 		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
 		const dataEndDate   = new Date();
 		const queryPath     = "https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A193440673&start-date=" + getDateString(dataStartDate) + "&end-date=" + getDateString(dataEndDate) + "&metrics=ga%3Apageviews%2Cga%3AuniquePageviews&dimensions=ga%3ApagePath%2Cga%3Adate"
+		this.setState({
+			isLoading: true
+		});
 		window.gapi.client
 		.request({
 			path: queryPath
@@ -80,7 +86,8 @@ export default class Analytics extends Component {
 		.then((...data) => {
 			console.log("Analytics data: " + JSON.stringify(data));
 			this.setState({
-				queryData: data[0].result
+				queryData: data[0].result,
+				isLoading: false
 			}, () => {
 				handleAnalyticsData(data[0].result, dataStartDate);
 			});
@@ -104,18 +111,35 @@ export default class Analytics extends Component {
 		return diff;
 	}
 
+	setXAxisLabel = () => {
+		const { duration } = this.state;
+		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
+		let newXAxis = [];
+		for(let idx = 0; idx < this.state.duration; idx++) {
+			const newDate = new Date(new Date().setDate(dataStartDate.getDate() + idx));
+			const dateStr = newDate.getFullYear().toString() + '/' + (newDate.getMonth() + 1).toString() + '/' + newDate.getDate().toString();
+			newXAxis.push(dateStr);
+		}
+		this.setState({
+			xAxis: newXAxis
+		});
+	}
+
 	handleAnalyticsData = (data) => {
-		const { chartData, duration, countType } = this.state;
-		const createSeriesIfNeed   = this.createSeriesIfNeed;
+		const { duration, countType } = this.state;
 		const getDataIdxFromString = this.getDataIdxFromString;
-		const insertDataForSeries  = this.insertDataForSeries;
+		const setXAxisLabel = this.setXAxisLabel;
+		const getTotalNum = this.getTotalNum;
 
 		if(data.hasOwnProperty('rows')) {
 			const dataArray = data.rows;
 			console.log("data array: " + JSON.stringify(dataArray));
+			setXAxisLabel();
+			getTotalNum();
+
 			let newDataArray = [];
 
-			dataArray.map(function(data, index){
+			dataArray.forEach(function(data, index){
 				console.log("data: " + JSON.stringify(data));
 				const seriesName = data[0];
 				const dataDate   = data[1];
@@ -139,11 +163,10 @@ export default class Analytics extends Component {
 					//series not found
 					console.log("series not found...");
 				} else {
-					newDataArray[seriesIndex].data[getDataIdxFromString(dataDate)] = dataValue;
+					newDataArray[seriesIndex].data[dateIndex] = dataValue;
 				}
 			});
 
-			console.log("new data array: " + JSON.stringify(newDataArray));
 			this.setState({
 				chartData: newDataArray
 			});
@@ -175,19 +198,40 @@ export default class Analytics extends Component {
 		});
 	}
 
+	getTitle = () => {
+		return (this.state.countType === 'pageviews' ? '總瀏覽量' : '不重複瀏覽量');
+	}
+
+	getTotalNum = () => {
+		const { queryData, total } = this.state;
+		if(queryData.hasOwnProperty('totalsForAllResults')) {
+			this.setState({
+				total: this.state.countType === 'pageviews' ? queryData.totalsForAllResults["ga:pageviews"] : queryData.totalsForAllResults['ga:uniquePageviews']
+			});
+		}
+		return total.toString();
+	}
+
 	render() {
-		const { chartData, duration, countType } = this.state; 
+		const { chartData, duration, countType, isLoading, xAxis, total } = this.state; 
 		const handleDurationChange = this.handleDurationChange;
 		const handleCountTypeChange = this.handleCountTypeChange;
+		const getTitle = this.getTitle;
 		const options = {
 			chart: {
 				type: 'line'
 			},
 			title: {
-				text: '流量統計'
+				text: 'LINE@ 流量統計'
+			},
+			xAxis: {
+				categories: xAxis,
 			},
 			series: chartData
 		};
+		const add = (accumulator, a) => {
+			return accumulator + a;
+		}
 
 		return (
 			<div>
@@ -195,16 +239,55 @@ export default class Analytics extends Component {
 				<a href="https://analytics.google.com/analytics/web/#/report-home/a138277882w198888686p193440673" rel="noopener noreferrer" target="_blank" title="Google Analytics">Google Analytics</a>
 				<Segment raised>
 					<Button.Group>
-						<Button style={{background: countType === 'pageviews' ? '#00B300' : 'lightgray', color: countType === 'pageviews' ? 'white' : 'gray'}} value='pageviews' onClick={handleCountTypeChange} >瀏覽量</Button>
+						<Button style={{background: countType === 'pageviews' ? '#00B300' : 'lightgray', color: countType === 'pageviews' ? 'white' : 'gray', fontWeight: 'normal'}} value='pageviews' onClick={handleCountTypeChange} >總瀏覽量</Button>
 						<Button.Or />
-						<Button style={{background: countType === 'uniquePageviews' ? '#00B300' : 'lightgray', color: countType === 'uniquePageviews' ? 'white' : 'gray'}} value='uniquePageviews' onClick={handleCountTypeChange} >不重複瀏覽量</Button>
+						<Button style={{background: countType === 'uniquePageviews' ? '#00B300' : 'lightgray', color: countType === 'uniquePageviews' ? 'white' : 'gray', fontWeight: 'normal'}} value='uniquePageviews' onClick={handleCountTypeChange} >不重複瀏覽量</Button>
 					</Button.Group>
-					<Button.Group>
-						<Button style={{background: duration === 1  ? '#00B300' : 'lightgray', color: duration === 1  ? 'white' : 'gray'}} value={1}  onClick={handleDurationChange} >天</Button>
-						<Button style={{background: duration === 7  ? '#00B300' : 'lightgray', color: duration === 7  ? 'white' : 'gray'}} value={7}  onClick={handleDurationChange} >週</Button>
-						<Button style={{background: duration === 28 ? '#00B300' : 'lightgray', color: duration === 28 ? 'white' : 'gray'}} value={28} onClick={handleDurationChange} >月</Button>
+					<Button.Group style={{float: 'right'}}>
+						<Button style={{background: duration === 1  ? '#00B300' : 'lightgray', color: duration === 1  ? 'white' : 'gray', fontWeight: 'normal'}} value={1}  onClick={handleDurationChange} >天</Button>
+						<Button style={{background: duration === 7  ? '#00B300' : 'lightgray', color: duration === 7  ? 'white' : 'gray', fontWeight: 'normal'}} value={7}  onClick={handleDurationChange} >週</Button>
+						<Button style={{background: duration === 28 ? '#00B300' : 'lightgray', color: duration === 28 ? 'white' : 'gray', fontWeight: 'normal'}} value={28} onClick={handleDurationChange} >月</Button>
 					</Button.Group>
 					<HighchartsReact highcharts={Highcharts} options={options} />
+					<Table>
+						<Table.Header>
+							<Table.Row>
+								<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} >功能</Table.HeaderCell>
+								<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} >{getTitle()}</Table.HeaderCell>
+								<Table.HeaderCell style={{fontFamily: 'Noto Sans TC'}} >百分比</Table.HeaderCell>
+							</Table.Row>
+						</Table.Header>
+
+						<Table.Body>
+							{isLoading && <Table.Row>
+								<Table.Cell colSpan='2'>
+									<Loader active inline='centered' />
+								</Table.Cell>
+							</Table.Row>
+							}
+							{!isLoading && <Table.Row>
+								<Table.Cell singleLine ></Table.Cell>
+								<Table.Cell style={{fontFamily: 'Noto Sans TC'}}>
+									<Header>{total}</Header>
+									<Header.Subheader>時間內的總瀏覽量</Header.Subheader>
+								</Table.Cell>
+								<Table.Cell style={{fontFamily: 'Noto Sans TC'}}>
+									<Header>100.00%</Header>
+									<Header.Subheader>總百分比</Header.Subheader>
+								</Table.Cell>
+							</Table.Row>}
+							{chartData.map(function(series, index){
+								const sum = series.data.reduce(add);
+								return (
+									<Table.Row key={index}>
+										<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{series.name}</Table.Cell>
+										<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{sum}</Table.Cell>
+										<Table.Cell singleLine style={{fontFamily: 'Noto Sans TC'}}>{(sum/total*100).toFixed(2)}%</Table.Cell>
+									</Table.Row>
+								)
+							})}
+						</Table.Body>
+					</Table>
 				</Segment>
 			</div>
 		)
