@@ -89,7 +89,7 @@ export default class Analytics extends Component {
 				queryData: data[0].result,
 				isLoading: false
 			}, () => {
-				handleAnalyticsData(data[0].result, dataStartDate);
+				handleAnalyticsData(data[0].result);
 			});
 		});
 	}
@@ -103,9 +103,11 @@ export default class Analytics extends Component {
 		const year      = parseInt(dateString.substring(0, 4));
 		const month     = parseInt(dateString.substring(4, 6));
 		const date      = parseInt(dateString.substring(6, 8));
-		const dateObj   = new Date(year, month, date);
+		const dateObj   = new Date(year, month - 1, date);
+		console.log("data date: " + dateObj.getFullYear() + "/" + (dateObj.getMonth() + 1) + "/" + dateObj.getDate());
 		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
-		const startDate = new Date(dataStartDate.getFullYear(), dataStartDate.getMonth() + 1, dataStartDate.getDate());
+		const startDate = new Date(dataStartDate.getFullYear(), dataStartDate.getMonth(), dataStartDate.getDate());
+		console.log("start date: " + startDate.getFullYear() + "/" + (startDate.getMonth() + 1) + "/" + startDate.getDate());
 		const diff      = (dateObj - startDate) / (1000 * 60 * 60 * 24);
 		console.log("diff: " + diff);
 		return diff;
@@ -114,12 +116,14 @@ export default class Analytics extends Component {
 	setXAxisLabel = () => {
 		const { duration } = this.state;
 		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
+		const startDate = new Date(dataStartDate.getFullYear(), dataStartDate.getMonth(), dataStartDate.getDate());
 		let newXAxis = [];
-		for(let idx = 0; idx < this.state.duration; idx++) {
-			const newDate = new Date(new Date().setDate(dataStartDate.getDate() + idx));
-			const dateStr = newDate.getFullYear().toString() + '/' + (newDate.getMonth() + 1).toString() + '/' + newDate.getDate().toString();
+		for(let idx = 0; idx <= this.state.duration; idx++) {
+			const newDate = new Date(new Date().setDate(startDate.getDate() + idx));
+			const dateStr = newDate.getFullYear().toString() + '/' + newDate.getMonth().toString() + '/' + newDate.getDate().toString();
 			newXAxis.push(dateStr);
 		}
+		console.log("x axis data: " + JSON.stringify(newXAxis));
 		this.setState({
 			xAxis: newXAxis
 		});
@@ -151,8 +155,9 @@ export default class Analytics extends Component {
 					console.log("series not found, create one");
 					let newSeries = {};
 					newSeries.name = seriesName;
-					newSeries.data = new Array(duration).fill(0);
+					newSeries.data = new Array(duration + 1).fill(0);
 					newDataArray = [...newDataArray, newSeries];
+					console.log("chart data after created: " + JSON.stringify(newDataArray));
 				} else {
 					console.log("series found");
 				}
@@ -169,6 +174,8 @@ export default class Analytics extends Component {
 
 			this.setState({
 				chartData: newDataArray
+			}, () => {
+				console.log("new chart data: " + JSON.stringify(this.state.chartData));
 			});
 		} else {
 			alert("沒有資料");
@@ -189,12 +196,12 @@ export default class Analytics extends Component {
 	handleCountTypeChange = (event, data) => {
 		const { queryData, duration } = this.state;
 		const handleAnalyticsData = this.handleAnalyticsData;
-		const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
+		//const dataStartDate = new Date(new Date().setDate(new Date().getDate() - duration));
 		this.setState({
 			chartData: [],
 			countType: data.value
 		}, () => {
-			handleAnalyticsData(queryData, dataStartDate);
+			handleAnalyticsData(queryData);
 		});
 	}
 
